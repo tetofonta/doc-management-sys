@@ -22,4 +22,19 @@ export class AuthConfig {
     @IsNotEmpty()
     @IsDefined()
     public readonly refresh_token_header: string = 'X-Refresh-Token';
+
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    public readonly old_token_header: string = 'X-Old-Token';
+
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    public readonly refresh_token_hmac_algo: string = 'sha256';
+
+    @IsString()
+    @IsNotEmpty()
+    @IsDefined()
+    public readonly refresh_token_hmac_secret: string;
 }

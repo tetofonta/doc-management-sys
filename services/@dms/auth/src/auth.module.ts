@@ -1,8 +1,12 @@
-import { DynamicModule, InjectionToken, Module, OptionalFactoryDependency, Type } from '@nestjs/common';
+import { DynamicModule, InjectionToken, OptionalFactoryDependency, Type } from '@nestjs/common';
 import { AuthorizerService } from './authorizer.service';
 import { AuthConfig } from './config/AuthConfig';
 import { JwtModule } from '@nestjs/jwt';
 import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
+import { DMS_AUTH_CONFIG_INJECT_KEY, DMS_AUTH_FEATURES_INJECT_KEY } from './constants';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { PassportModule } from '@nestjs/passport';
+import { get_feature_module } from './decorators/feature.decorator';
 
 export type AuthModuleForAuthorizerAsync = {
     imports: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference>;
@@ -10,52 +14,65 @@ export type AuthModuleForAuthorizerAsync = {
     useFactory: (...args: any[]) => AuthConfig | Promise<AuthConfig>;
 };
 
-@Module({})
 export class AuthModule {
-    // static forFeatures(...features: Type<AppFeature>[]): DynamicModule {
-    //     return {
-    //         module: AuthModule,
-    //         providers: [
-    //             JwtStrategy,
-    //             AuthService,
-    //             {
-    //                 provide: "FEATURES",
-    //                 inject: features,
-    //                 useFactory: (...args) => args.reduce((o: any, f: AppFeature) => Object.assign(o, {[f.feature_name]: f}), {})
-    //             }
-    //         ],
-    //         imports: [
-    //             PassportModule,
-    //             ConfigModule.forFeature(authConfig),
-    //             TypeOrmModule.forFeature([UserEntity]),
-    //             ...features.map((e: any) => e.import_module)
-    //         ],
-    //         exports: [AuthService]
-    //     }
-    // }
-
-    static forAuthorizer(config: AuthConfig): DynamicModule {
+    static forFeatures(...features: Type[]): DynamicModule {
+        const feature_metadata = features.map((e) => get_feature_module(e)).filter((e) => !!e.module);
+        const modules = feature_metadata.map((e) => e.module);
+        const all_features_names = feature_metadata.map((e) => e.name);
+        const all_features = {
+            provide: DMS_AUTH_FEATURES_INJECT_KEY,
+            inject: all_features_names,
+            useFactory: (...args: Type[]) =>
+                args.reduce((a, b, i) => Object.assign(a, { [all_features_names[i]]: b }), {}),
+        };
         return {
             module: AuthModule,
-            providers: [AuthorizerService, { provide: 'configs', useValue: config }],
-            exports: [AuthorizerService],
-            imports: [JwtModule.register(config.jwt)],
+            providers: [all_features],
+            exports: [all_features],
+            imports: modules,
         };
     }
 
-    static forAuthorizerAsync(data: AuthModuleForAuthorizerAsync): DynamicModule {
+    static forAuthorizer(): DynamicModule {
         return {
             module: AuthModule,
+            providers: [AuthorizerService],
+            exports: [AuthorizerService],
+        };
+    }
+
+    static forRoot(data: AuthConfig): DynamicModule {
+        return {
+            module: AuthModule,
+            global: true,
+            providers: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, JwtStrategy],
+            imports: [JwtModule.register({ global: true, ...data.jwt }), PassportModule],
+            exports: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }],
+        };
+    }
+
+    static forRootAsync(data: AuthModuleForAuthorizerAsync): DynamicModule {
+        const config_provider = {
+            provide: DMS_AUTH_CONFIG_INJECT_KEY,
+            inject: data.inject,
+            useFactory: async (...args: any[]) => await data.useFactory(...args),
+        };
+
+        return {
+            module: AuthModule,
+            global: true,
+            providers: [config_provider, JwtStrategy],
+            exports: [config_provider],
             imports: [
                 ...data.imports,
                 JwtModule.registerAsync({
-                    imports: data.imports,
                     inject: data.inject,
+                    imports: data.imports,
+                    global: true,
                     useFactory: async (...args: any[]) => (await data.useFactory(...args)).jwt,
                 }),
+                PassportModule,
             ],
-            providers: [AuthorizerService, { provide: 'configs', useFactory: data.useFactory, inject: data.inject }],
-            exports: [AuthorizerService],
         };
     }
 }

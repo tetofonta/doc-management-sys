@@ -8,10 +8,11 @@ export interface TokenPayload {
   superuser: boolean;
   features: string[];
   groups: string[];
+  siblingHash: string;
 }
 
 function createBaseTokenPayload(): TokenPayload {
-  return { userId: "", superuser: false, features: [], groups: [] };
+  return { userId: "", superuser: false, features: [], groups: [], siblingHash: "" };
 }
 
 export const TokenPayload = {
@@ -27,6 +28,9 @@ export const TokenPayload = {
     }
     for (const v of message.groups) {
       writer.uint32(34).string(v!);
+    }
+    if (message.siblingHash !== "") {
+      writer.uint32(42).string(message.siblingHash);
     }
     return writer;
   },
@@ -66,6 +70,13 @@ export const TokenPayload = {
 
           message.groups.push(reader.string());
           continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.siblingHash = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -81,6 +92,7 @@ export const TokenPayload = {
       superuser: isSet(object.superuser) ? globalThis.Boolean(object.superuser) : false,
       features: globalThis.Array.isArray(object?.features) ? object.features.map((e: any) => globalThis.String(e)) : [],
       groups: globalThis.Array.isArray(object?.groups) ? object.groups.map((e: any) => globalThis.String(e)) : [],
+      siblingHash: isSet(object.siblingHash) ? globalThis.String(object.siblingHash) : "",
     };
   },
 
@@ -98,6 +110,9 @@ export const TokenPayload = {
     if (message.groups?.length) {
       obj.groups = message.groups;
     }
+    if (message.siblingHash !== "") {
+      obj.siblingHash = message.siblingHash;
+    }
     return obj;
   },
 
@@ -110,6 +125,7 @@ export const TokenPayload = {
     message.superuser = object.superuser ?? false;
     message.features = object.features?.map((e) => e) || [];
     message.groups = object.groups?.map((e) => e) || [];
+    message.siblingHash = object.siblingHash ?? "";
     return message;
   },
 };
