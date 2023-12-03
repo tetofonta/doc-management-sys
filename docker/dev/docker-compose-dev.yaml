@@ -1,0 +1,11 @@
+services:
+  postgres:
+    image: postgres:alpine
+    restart: 'no'
+    env_file:
+      - env/postgres.env
+    volumes:
+      - ./volumes/pg:/var/lib/postgresql/data/pgdata:rw
+      - ./bootstrap/postgres:/docker-entrypoint-initdb.d:ro
+    ports:
+      - 5432:5432

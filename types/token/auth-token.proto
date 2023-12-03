@@ -1,0 +1,7 @@
+syntax = "proto3";
+message TokenPayload{
+  string user_id = 1;
+  bool superuser = 2;
+  repeated string features = 3;
+  repeated string groups = 4;
+}
