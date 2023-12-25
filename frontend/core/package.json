@@ -1,0 +1,36 @@
+{
+  "name": "core",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src",
+    "format": "prettier --write ./src"
+  },
+  "dependencies": {
+    "ra-data-json-server": "^4.16.0",
+    "react": "^18.2.0",
+    "react-admin": "^4.16.0",
+    "react-dom": "^18.2.0",
+    "@dms/remote-component": "file:../@dms/remote-component",
+    "@mui/material": "^5.15.2",
+    "@mui/icons-material": "^5.15.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.60.1",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@types/node": "^18.16.1",
+    "@types/react": "^18.0.22",
+    "@types/react-dom": "^18.0.7",
+    "@vitejs/plugin-react": "^4.0.1",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9"
+  }
+}

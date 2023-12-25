@@ -1,0 +1,3 @@
+jwt:
+  secret: 'thisisasecret:)'
+refresh_token_hmac_secret: 'anothersupersecret...'
