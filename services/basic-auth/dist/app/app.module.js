@@ -15,7 +15,7 @@ const AuthConfig_1 = require("../config/AuthConfig");
 const config_1 = require("@dms/config");
 const auth_module_1 = require("./auth/auth.module");
 const auth_module_2 = require("@dms/auth/lib/auth.module");
-const token_module_1 = require("./token/token.module");
+const user_module_1 = require("./user/user.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,7 +30,7 @@ exports.AppModule = AppModule = __decorate([
             }),
             persistence_module_1.DMSPersistenceModule,
             auth_module_1.DMSAuthModule,
-            token_module_1.TokenModule
+            user_module_1.UserModule,
         ],
     })
 ], AppModule);

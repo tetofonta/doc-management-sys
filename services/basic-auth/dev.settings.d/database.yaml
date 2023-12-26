@@ -2,3 +2,4 @@ cache: false
 host: localhost
 port: 5432
 synchronize: true
+logging: true

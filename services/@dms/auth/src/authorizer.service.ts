@@ -15,6 +15,7 @@ export class AuthorizerService {
 
     public async issueToken(
         user_id: string,
+        user_name: string,
         superuser: boolean,
         features: string[] | null,
         groups: string[],
@@ -22,6 +23,7 @@ export class AuthorizerService {
     ): Promise<void> {
         const payload: TokenPayload = {
             userId: user_id,
+            userName: user_name,
             superuser,
             features,
             groups,
@@ -78,6 +80,6 @@ export class AuthorizerService {
             throw new NotAcceptableException('sibling hash is not valid');
 
         const old_content = this.jwtService.decode(old_token) as TokenPayload;
-        await this.issueToken(old_content.userId, old_content.superuser, old_content.features, old_content.groups, res);
+        await this.issueToken(old_content.userId, old_content.userName, old_content.superuser, old_content.features, old_content.groups, res);
     }
 }

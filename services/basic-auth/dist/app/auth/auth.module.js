@@ -11,12 +11,14 @@ const common_1 = require("@nestjs/common");
 const auth_controller_1 = require("./auth.controller");
 const auth_module_1 = require("@dms/auth/lib/auth.module");
 const auth_service_1 = require("./auth.service");
+const typeorm_1 = require("@nestjs/typeorm");
+const LocalUser_entity_1 = require("../../persistence/entities/LocalUser.entity");
 let DMSAuthModule = class DMSAuthModule {
 };
 exports.DMSAuthModule = DMSAuthModule;
 exports.DMSAuthModule = DMSAuthModule = __decorate([
     (0, common_1.Module)({
-        imports: [auth_module_1.AuthModule.forAuthorizer()],
+        imports: [auth_module_1.AuthModule.forAuthorizer(), typeorm_1.TypeOrmModule.forFeature([LocalUser_entity_1.LocalUserEntity])],
         controllers: [auth_controller_1.AuthController],
         providers: [auth_service_1.AuthService],
     })

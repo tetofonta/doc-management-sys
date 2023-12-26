@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
                 },
             ]),
             ...configs.jwt.verifyOptions,
-            secretOrKey: configs.jwt.publicKey || configs.jwt.secret,
+            secretOrKey: configs.jwt.publicKey,
         });
     }
 

@@ -7,6 +7,7 @@ import { getConfigKey } from '@dms/config';
 import { DMSAuthModule } from './auth/auth.module';
 import { AuthModule } from '@dms/auth/lib/auth.module';
 import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
+import { UserModule } from './user/user.module';
 
 @Module({
     imports: [
@@ -18,6 +19,7 @@ import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
         }),
         DMSPersistenceModule,
         DMSAuthModule,
+        UserModule,
     ],
 })
 export class AppModule {}

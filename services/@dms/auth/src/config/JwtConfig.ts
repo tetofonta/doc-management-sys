@@ -5,13 +5,7 @@ import { JwtVerifyOptions } from './JwtVerifyOptions';
 import { JwtSignOptions } from './JwtSignOptions';
 
 export class JwtConfig implements JwtModuleOptions {
-    @ValidateIf((o) => !o.publicKey && !o.privateKey)
     @IsString()
-    @IsNotEmpty()
-    readonly secret?: string;
-
-    @IsString()
-    @IsOptional()
     publicKey?: string;
 
     @IsString()

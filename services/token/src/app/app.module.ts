@@ -6,6 +6,7 @@ import { getConfigKey } from '@dms/config';
 import { AuthModule } from '@dms/auth/lib/auth.module';
 import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
 import { TokenModule } from './token/token.module';
+import { WellKnownController } from './well-known.controller';
 
 @Module({
     imports: [
@@ -17,5 +18,6 @@ import { TokenModule } from './token/token.module';
         }),
         TokenModule,
     ],
+    controllers: [WellKnownController],
 })
 export class AppModule {}

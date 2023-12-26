@@ -7,6 +7,8 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/config/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/persistence/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/out" />
+      <excludeFolder url="file://$MODULE_DIR$/raw" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

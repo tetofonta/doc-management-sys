@@ -8,11 +8,12 @@ export interface TokenPayload {
   superuser: boolean;
   features: string[];
   groups: string[];
+  userName: string;
   siblingHash: string;
 }
 
 function createBaseTokenPayload(): TokenPayload {
-  return { userId: "", superuser: false, features: [], groups: [], siblingHash: "" };
+  return { userId: "", superuser: false, features: [], groups: [], userName: "", siblingHash: "" };
 }
 
 export const TokenPayload = {
@@ -29,8 +30,11 @@ export const TokenPayload = {
     for (const v of message.groups) {
       writer.uint32(34).string(v!);
     }
+    if (message.userName !== "") {
+      writer.uint32(42).string(message.userName);
+    }
     if (message.siblingHash !== "") {
-      writer.uint32(42).string(message.siblingHash);
+      writer.uint32(802).string(message.siblingHash);
     }
     return writer;
   },
@@ -75,6 +79,13 @@ export const TokenPayload = {
             break;
           }
 
+          message.userName = reader.string();
+          continue;
+        case 100:
+          if (tag !== 802) {
+            break;
+          }
+
           message.siblingHash = reader.string();
           continue;
       }
@@ -92,6 +103,7 @@ export const TokenPayload = {
       superuser: isSet(object.superuser) ? globalThis.Boolean(object.superuser) : false,
       features: globalThis.Array.isArray(object?.features) ? object.features.map((e: any) => globalThis.String(e)) : [],
       groups: globalThis.Array.isArray(object?.groups) ? object.groups.map((e: any) => globalThis.String(e)) : [],
+      userName: isSet(object.userName) ? globalThis.String(object.userName) : "",
       siblingHash: isSet(object.siblingHash) ? globalThis.String(object.siblingHash) : "",
     };
   },
@@ -110,6 +122,9 @@ export const TokenPayload = {
     if (message.groups?.length) {
       obj.groups = message.groups;
     }
+    if (message.userName !== "") {
+      obj.userName = message.userName;
+    }
     if (message.siblingHash !== "") {
       obj.siblingHash = message.siblingHash;
     }
@@ -125,6 +140,7 @@ export const TokenPayload = {
     message.superuser = object.superuser ?? false;
     message.features = object.features?.map((e) => e) || [];
     message.groups = object.groups?.map((e) => e) || [];
+    message.userName = object.userName ?? "";
     message.siblingHash = object.siblingHash ?? "";
     return message;
   },

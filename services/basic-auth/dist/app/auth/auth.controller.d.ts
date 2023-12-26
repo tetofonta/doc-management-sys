@@ -1,7 +1,8 @@
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import { AuthLoginPostBody } from '../../types/auth/auth-login.post';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    get(res: Response): Promise<void>;
+    login(res: Response, req: Request, body: AuthLoginPostBody): Promise<void>;
 }

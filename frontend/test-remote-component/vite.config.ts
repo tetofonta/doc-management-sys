@@ -8,8 +8,8 @@ import * as fs from 'fs';
 import * as pkg from "./package.json"
 
 const base = `/components/${pkg.name}`
-const outDir = `../core/public/components/${pkg.name}/`;
-const componentBase = `../core/public/components/`;
+const outDir = `../out/components/${pkg.name}/`;
+const componentBase = `../out/components/`;
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -37,7 +37,7 @@ export default defineConfig({
                 plugin_manifest[pkg.name] = manifest
                 console.log({[pkg.name]: manifest})
 
-                fs.writeFileSync(plugin_manifest_path, JSON.stringify(plugin_manifest))
+                fs.writeFileSync(plugin_manifest_path, JSON.stringify(plugin_manifest, null, 2))
                 fs.rmSync(path.join(outDir, 'index.html'))
             }
         }
@@ -56,7 +56,7 @@ export default defineConfig({
         // eslint-disable-next-line no-undef
         sourcemap: process.env.NODE_ENV == 'production' ? false : 'inline',
         outDir,
-        assetsDir: ``,
+        assetsDir: "",
         emptyOutDir: true,
         manifest: true,
         watch: {

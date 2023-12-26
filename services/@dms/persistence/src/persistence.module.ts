@@ -19,16 +19,6 @@ export class PersistenceModule {
         };
     }
 
-    public static forFeatures(...entities: Type<BaseEntity>[]): DynamicModule {
-        const providers = createTypeOrmProviders(entities, DEFAULT_DATA_SOURCE_NAME);
-        EntitiesMetadataStorage.addEntitiesByDataSource(DEFAULT_DATA_SOURCE_NAME, [...entities]);
-        return {
-            module: TypeOrmModule,
-            providers: providers,
-            exports: providers,
-        };
-    }
-
     static typeormConfigs(options: {
         imports: DynamicModule[];
         useFactory: (conf: PersistenceConfig) => PersistenceConfig;

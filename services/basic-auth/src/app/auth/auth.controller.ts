@@ -1,14 +1,19 @@
-import { Controller, Get, HttpCode, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Response, Request } from 'express';
+import { AuthLoginPostBody } from '../../types/auth/auth-login.post';
 
 @Controller('/auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
 
-    @Get('/')
+    @Post('/')
     @HttpCode(204)
-    public async get(@Res({ passthrough: true }) res: Response) {
-        return this.authService.authenticate('pippo', 'pera', res);
+    public async login(
+        @Res({ passthrough: true }) res: Response,
+        @Req() req: Request,
+        @Body() body: AuthLoginPostBody
+    ) {
+        return this.authService.authenticate(body.username, body.password, res, req);
     }
 }

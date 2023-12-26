@@ -7,6 +7,8 @@ import { DMS_AUTH_CONFIG_INJECT_KEY, DMS_AUTH_FEATURES_INJECT_KEY } from './cons
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
 import { get_feature_module } from './decorators/feature.decorator';
+import { AuthService } from './auth.service';
+import * as crypto from 'crypto';
 
 export type AuthModuleForAuthorizerAsync = {
     imports: Array<Type | DynamicModule | Promise<DynamicModule> | ForwardReference>;
@@ -42,12 +44,20 @@ export class AuthModule {
     }
 
     static forRoot(data: AuthConfig): DynamicModule {
+        data.jwt.signOptions.keyid = crypto.createHash('sha384').update(data.jwt.publicKey).digest('base64');
+
         return {
             module: AuthModule,
             global: true,
-            providers: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, JwtStrategy],
-            imports: [JwtModule.register({ global: true, ...data.jwt }), PassportModule],
-            exports: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }],
+            providers: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, JwtStrategy, AuthService],
+            imports: [
+                JwtModule.register({
+                    global: true,
+                    ...data.jwt,
+                }),
+                PassportModule,
+            ],
+            exports: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, AuthService],
         };
     }
 
@@ -61,15 +71,19 @@ export class AuthModule {
         return {
             module: AuthModule,
             global: true,
-            providers: [config_provider, JwtStrategy],
-            exports: [config_provider],
+            providers: [config_provider, JwtStrategy, AuthService],
+            exports: [config_provider, AuthService],
             imports: [
                 ...data.imports,
                 JwtModule.registerAsync({
                     inject: data.inject,
                     imports: data.imports,
                     global: true,
-                    useFactory: async (...args: any[]) => (await data.useFactory(...args)).jwt,
+                    useFactory: async (...args: any[]) => {
+                        const opt = (await data.useFactory(...args)).jwt;
+                        opt.signOptions.keyid = crypto.createHash('sha384').update(opt.publicKey).digest('base64');
+                        return opt;
+                    },
                 }),
                 PassportModule,
             ],

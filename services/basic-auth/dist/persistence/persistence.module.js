@@ -12,6 +12,10 @@ const config_1 = require("@dms/config");
 const persistence_module_1 = require("@dms/persistence/lib/persistence.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const PersistenceSettings_1 = require("../config/PersistenceSettings");
+const LocalGroup_entity_1 = require("./entities/LocalGroup.entity");
+const LocalUser_entity_1 = require("./entities/LocalUser.entity");
+const AuthConfig_1 = require("../config/AuthConfig");
+const LocalUser_subscriber_1 = require("./subscribers/LocalUser.subscriber");
 let DMSPersistenceModule = class DMSPersistenceModule {
 };
 exports.DMSPersistenceModule = DMSPersistenceModule;
@@ -22,10 +26,12 @@ exports.DMSPersistenceModule = DMSPersistenceModule = __decorate([
                 imports: [config_1.ConfigLoaderModule.forFeatures(PersistenceSettings_1.DMSPersistenceSettings)],
                 inject: [(0, config_1.getConfigKey)(PersistenceSettings_1.DMSPersistenceSettings)],
                 useFactory: (conf) => {
-                    return conf.setEntities([]);
+                    return conf.setEntities([LocalGroup_entity_1.LocalGroupEntity, LocalUser_entity_1.LocalUserEntity]);
                 },
             })),
+            config_1.ConfigLoaderModule.forFeatures(AuthConfig_1.DMSAuthConfig),
         ],
+        providers: [LocalUser_subscriber_1.LocalUserSubscriber],
     })
 ], DMSPersistenceModule);
 //# sourceMappingURL=persistence.module.js.map

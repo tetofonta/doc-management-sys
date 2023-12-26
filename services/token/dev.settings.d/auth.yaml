@@ -1,3 +1,4 @@
 jwt:
-  secret: 'thisisasecret:)'
+  signOptions:
+    algorithm: ES384
 refresh_token_hmac_secret: 'anothersupersecret...'

@@ -8,9 +8,11 @@
   "scripts": {
     "build": "nest build",
     "start": "nest start",
-    "start:dev": "DMS_BASIC_AUTH_CONFIG_DIR=./dev.settings.d/ ../run-env.sh ../../docker/dev/env/postgres.env -- nest start --watch",
-    "start:debug": "DMS_BASIC_AUTH_CONFIG_DIR=./dev.settings.d/ ../run-env.sh ../../docker/dev/env/postgres.env -- nest start --debug --watch",
-    "start:prod": "node dist/main"
+    "start:dev": "DMS_BASIC_AUTH_CONFIG_DIR=./dev.settings.d/ ../run-env.sh ./dev.settings.d/.env ../../docker/dev/env/postgres.env -- nest start --watch",
+    "start:debug": "DMS_BASIC_AUTH_CONFIG_DIR=./dev.settings.d/ ../run-env.sh ./dev.settings.d/.env ../../docker/dev/env/postgres.env -- nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "genkey:RS256": "openssl genrsa -out dev.settings.d/jwt.RS256.pem 4096; openssl rsa -in dev.settings.d/jwt.RS256.pem -pubout > dev.settings.d/jwt.RS256.pub.pem",
+    "genkey:ES384": "openssl ecparam -genkey -name P-384 -noout -out dev.settings.d/jwt.ES384.pem; openssl ec -in dev.settings.d/jwt.ES384.pem -pubout -out dev.settings.d/jwt.ES384.pub.pem"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",

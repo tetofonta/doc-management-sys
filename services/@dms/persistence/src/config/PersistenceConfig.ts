@@ -15,6 +15,7 @@ import { PersistenceCacheConfig } from './PersistenceCacheConfig';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
 import { TlsOptions } from 'tls';
 import { EntitySchema } from 'typeorm';
+import { MixedList } from 'typeorm/common/MixedList';
 
 export class PersistenceConfig implements PostgresConnectionOptions {
     public readonly applicationName: string = 'DMS';
@@ -86,9 +87,11 @@ export class PersistenceConfig implements PostgresConnectionOptions {
     public readonly uuidExtension: 'pgcrypto' | 'uuid-ossp';
 
     @Exclude()
-    public readonly entities: EntitySchema[] = [];
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    public readonly entities: (Function | string | EntitySchema)[] = [];
 
-    public setEntities(e: EntitySchema[]): PersistenceConfig {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    public setEntities(e: (Function | string | EntitySchema)[]): PersistenceConfig {
         this.entities.push(...e);
         return this;
     }

@@ -2,7 +2,6 @@ import { IsBoolean, IsEnum, IsOptional, IsString } from 'class-validator';
 import { Algorithm, SignOptions } from 'jsonwebtoken';
 
 export class JwtSignOptions implements SignOptions {
-    @IsOptional()
     @IsEnum([
         'HS256',
         'HS384',
@@ -18,7 +17,7 @@ export class JwtSignOptions implements SignOptions {
         'PS512',
         'none',
     ])
-    algorithm?: Algorithm;
+    algorithm: Algorithm;
 
     @IsOptional()
     @IsString()
