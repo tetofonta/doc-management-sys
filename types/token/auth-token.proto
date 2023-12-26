@@ -1,7 +1,8 @@
-syntax = "proto3";
 message TokenPayload{
-  string user_id = 1;
-  bool superuser = 2;
+  required string user_id = 1;
+  required bool superuser = 2;
   repeated string features = 3;
   repeated string groups = 4;
+
+  optional string sibling_hash = 5;
 }

@@ -13,7 +13,7 @@ export class ConfigLoaderSettings {
     @IsString()
     @IsDefined()
     @IsNotEmpty()
-    public env_var_secret_file_prefix: string = 'SECRET_FILE_';
+    public env_var_secret_file_prefix: string = 'DMS_SECRET_FILE_';
 
     @IsString()
     @IsDefined()
@@ -61,5 +61,9 @@ export class ConfigLoaderSettings {
 
     public envVarPrefix(namespace) {
         return `${this.env_var_prefix}${namespace}${this.env_var_separator}`;
+    }
+
+    public secretFilePrefix(namespace) {
+        return `${this.env_var_secret_file_prefix}${namespace}${this.env_var_separator}`;
     }
 }

@@ -31,7 +31,7 @@ export class PersistenceModule {
 
     static typeormConfigs(options: {
         imports: DynamicModule[];
-        useFactory: (conf: DMSPersistenceSettings) => PersistenceConfig;
+        useFactory: (conf: PersistenceConfig) => PersistenceConfig;
         inject: string[];
     }): TypeOrmModuleAsyncOptions {
         return {

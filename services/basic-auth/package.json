@@ -23,7 +23,8 @@
     "pg": "^8.11.3",
 
     "@dms/config": "file:../@dms/config",
-    "@dms/persistence": "file:../@dms/persistence"
+    "@dms/persistence": "file:../@dms/persistence",
+    "@dms/auth": "file:../@dms/auth"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

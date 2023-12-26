@@ -101,7 +101,7 @@ export class ConfigLoaderService {
         }, object);
 
         //secret override
-        const files = this.extract_env_vars(this.config.envVarPrefix(namespace));
+        const files = this.extract_env_vars(this.config.secretFilePrefix(namespace));
         const secret_o = files.reduce((a, b) => {
             if (!fs.existsSync(b.value)) {
                 this.logger.warn(`Secret file does not exists: ${b.value}`);

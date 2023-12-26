@@ -8,12 +8,15 @@ export class RemoteElementBase extends HTMLElement {
     private mountPoint!: HTMLDivElement;
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
-    constructor(private readonly component: (props: { [k: string]: unknown }) => any) {
+    constructor(
+        private readonly component: (props: { [k: string]: unknown }) => any,
+        private readonly component_id: string
+    ) {
         super();
     }
 
     public connectedCallback() {
-        console.debug('Plugin loaded');
+        console.debug(`Plugin ${this.component_id} loaded`);
         this.mountPoint = document.createElement('div');
 
         const shadowRoot = this.attachShadow({ mode: 'open' });
@@ -22,14 +25,15 @@ export class RemoteElementBase extends HTMLElement {
         this.reactRoot = ReactDOM.createRoot(shadowRoot);
         retargetEvents(shadowRoot);
 
-        this.renderElement();
+        this.dispatchEvent(new Event(`${this.component_id}:loaded`));
     }
 
     protected build_element(props: { [k: string]: unknown }) {
+        console.log(props);
         return React.createElement(this.component, props);
     }
 
-    private renderElement() {
+    public renderElement() {
         const c = this.build_element(this.props);
         this.reactRoot.render(<React.StrictMode>{c}</React.StrictMode>);
     }

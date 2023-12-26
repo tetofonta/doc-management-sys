@@ -1,0 +1,39 @@
+$error-color: darken(red, 5)
+$warn-color: darken(yellow, 12)
+$info-color: darken(blue, 5)
+
+@function text-clr($color)
+  @if (lightness($color) > 50)
+    @return #000
+  @else
+    @return #fff
+
+.messageContainer
+  display: flex
+  flex-direction: column
+  align-items: center
+  padding: 5% 10% 5% 10%
+  max-width: 600px
+  width: 100%
+  margin: auto
+
+.bodyContainer
+  margin-top: 2rem
+  width: 100%
+
+.iconContainer
+  width: 60px
+  height: 60px
+  margin: 30px
+
+.iconContainerError
+  background-color: $error-color !important
+  color: text-clr($error-color) !important
+
+.iconContainerWarning
+  background-color: $warn-color !important
+  color: text-clr($warn-color) !important
+
+.iconContainerInfo
+  background-color: $info-color !important
+  color: text-clr($warn-color) !important

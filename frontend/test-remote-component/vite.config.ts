@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import * as path from 'path';
-import * as crypto from 'crypto';
+import * as nodeCrypto from 'crypto';
 import * as fs from 'fs';
 
 // @ts-ignore
@@ -22,7 +22,7 @@ export default defineConfig({
                 const index_file = JSON.parse(fs.readFileSync(manifest_path, {encoding: 'utf-8'}))["index.html"].file
                 const index_path = path.join(outDir, index_file)
 
-                const hash = crypto.createHash('sha384').update(fs.readFileSync(index_path, {encoding: 'utf-8'})).digest('base64')
+                const hash = nodeCrypto.createHash('sha384').update(fs.readFileSync(index_path, {encoding: 'utf-8'})).digest('base64')
 
                 const manifest = {
                     "index": path.join(base, index_file),
@@ -38,6 +38,7 @@ export default defineConfig({
                 console.log({[pkg.name]: manifest})
 
                 fs.writeFileSync(plugin_manifest_path, JSON.stringify(plugin_manifest))
+                fs.rmSync(path.join(outDir, 'index.html'))
             }
         }
     ],
@@ -50,8 +51,10 @@ export default defineConfig({
     },
     base,
     build: {
-        minify: false,
-        sourcemap: 'inline',
+        // eslint-disable-next-line no-undef
+        minify: process.env.NODE_ENV == 'production',
+        // eslint-disable-next-line no-undef
+        sourcemap: process.env.NODE_ENV == 'production' ? false : 'inline',
         outDir,
         assetsDir: ``,
         emptyOutDir: true,

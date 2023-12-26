@@ -11,12 +11,27 @@ const common_1 = require("@nestjs/common");
 const config_loader_module_1 = require("@dms/config/lib/config-loader.module");
 const AppConfigSettings_1 = require("../config/AppConfigSettings");
 const persistence_module_1 = require("../persistence/persistence.module");
+const AuthConfig_1 = require("../config/AuthConfig");
+const config_1 = require("@dms/config");
+const auth_module_1 = require("./auth/auth.module");
+const auth_module_2 = require("@dms/auth/lib/auth.module");
+const token_module_1 = require("./token/token.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
-        imports: [config_loader_module_1.ConfigLoaderModule.forRoot(AppConfigSettings_1.appConfigSettings), persistence_module_1.DMSPersistenceModule],
+        imports: [
+            config_loader_module_1.ConfigLoaderModule.forRoot(AppConfigSettings_1.appConfigSettings),
+            auth_module_2.AuthModule.forRootAsync({
+                imports: [config_loader_module_1.ConfigLoaderModule.forFeatures(AuthConfig_1.DMSAuthConfig)],
+                inject: [(0, config_1.getConfigKey)(AuthConfig_1.DMSAuthConfig)],
+                useFactory: (conf) => conf,
+            }),
+            persistence_module_1.DMSPersistenceModule,
+            auth_module_1.DMSAuthModule,
+            token_module_1.TokenModule
+        ],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
