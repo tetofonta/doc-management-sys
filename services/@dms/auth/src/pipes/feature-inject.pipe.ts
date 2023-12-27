@@ -40,7 +40,8 @@ export class FeatureInjectPipe implements PipeTransform {
         }
 
         const ret = ret_features
-            .filter((e) => value.tokenData.features.some((f) => e.startsWith(f)))
+            // .filter((e) => value.tokenData.features.some((f) => e.startsWith(f)))
+            .filter((e) => value.tokenData.features.includes(e))
             .map((e) => ({ name: e, value: this.features[e] }))
             .filter((e) => !!e.value);
 
@@ -52,6 +53,7 @@ export class FeatureInjectPipe implements PipeTransform {
 
     private hasFeature(features: string[], feature: string, superuser: boolean): boolean {
         if (superuser) return true;
-        return features.some((e) => e.startsWith(feature));
+        // return features.some((e) => e.startsWith(feature));
+        return features.includes(feature);
     }
 }

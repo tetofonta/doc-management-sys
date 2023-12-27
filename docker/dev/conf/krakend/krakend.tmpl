@@ -1,0 +1,13 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "DMS",
+  {{template "general.tmpl" . }},
+  "extra_config": {
+    "telemetry/logging": {{template "logging.tmpl" .}}
+  },
+  "endpoints": [
+    {{ template "services_token.tmpl" . }},
+    {{ template "services_auth_basic.tmpl" . }}
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "$schema": "https://www.krakend.io/schema/krakend.json",
+  "version": 3,
+  "name": "DMS",
+  "timeout": "3000ms",
+"cache_ttl": "100s",
+"output_encoding": "json",
+"port": 8080,
+"debug_endpoint": true,
+"echo_endpoint": true,
+"disable_rest": true,
+"sequential_start": false,
+  "extra_config": {
+    "telemetry/logging": {
+    "level": "INFO",
+    "prefix": "[DMS-KRAKEND]",
+    "syslog": false,
+    "stdout": true,
+    "format": "default",
+    "syslog_facility": "local3"
+}
+  },
+  "endpoints": [
+    {
+    "endpoint": "/api/token/",
+    "method": "GET",
+    "input_headers": ["Authorization"],
+    "backend": [{
+        "url_pattern": "/api/token/",
+        "method": "GET",
+        "host": [ "http://10.128.0.109:7100" ]
+    }],
+    "extra_config": {
+        "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "disable_jwk_security": true,
+    "cache": true,
+    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
+    "roles": ["token:info"],
+    "operation_debug": true
+}
+    }
+},
+{
+    "endpoint": "/api/token/",
+    "method": "PATCH",
+    "input_headers": ["Authorization", "X-Old-Token"],
+    "output_encoding": "no-op",
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/api/token/",
+        "method": "PATCH",
+        "host": [ "http://10.128.0.109:7100" ]
+    }],
+    "extra_config": {
+        "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "disable_jwk_security": true,
+    "cache": true,
+    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
+    "roles": ["token:refresh"],
+    "operation_debug": true
+}
+    }
+},
+    {
+    "endpoint": "/api/auth/basic/",
+    "method": "POST",
+    "output_encoding": "no-op",
+    "backend": [{
+        "encoding": "no-op",
+        "url_pattern": "/api/auth/",
+        "method": "POST",
+        "host": [ "http://10.128.0.109:7101" ]
+    }]
+}
+  ]
+}

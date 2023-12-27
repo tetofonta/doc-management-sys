@@ -43,7 +43,7 @@ __decorate([
     (0, common_1.Patch)('/'),
     (0, common_1.UseGuards)(jwt_guard_1.JwtAuthGuard, features_guard_1.FeatureGuard),
     (0, feature_require_decorator_1.RequireFeatures)(token_refresh_feature_1.TokenRefreshFeature),
-    (0, common_1.HttpCode)(204),
+    (0, common_1.HttpCode)(200),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)({ passthrough: true })),
     __param(2, (0, feature_inject_decorator_1.InjectFeature)(token_refresh_feature_1.TokenRefreshFeature)),

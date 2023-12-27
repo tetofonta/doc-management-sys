@@ -1,6 +1,9 @@
 jwt:
   signOptions:
     algorithm: ES384
+    audience: "dms"
+  verifyOptions:
+    audience: "dms"
 
 passwords:
   createUser: true

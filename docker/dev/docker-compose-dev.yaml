@@ -9,3 +9,14 @@ services:
       - ./bootstrap/postgres:/docker-entrypoint-initdb.d:ro
     ports:
       - 5432:5432
+  krakend:
+    image: devopsfaith/krakend:2.5-watch
+    restart: 'no'
+    command: ["run", "-dc", "krakend.tmpl"]
+    network_mode: host
+    env_file:
+      - env/krakend.env
+    ports:
+      - 8080:8080
+    volumes:
+      - ./conf/krakend:/etc/krakend

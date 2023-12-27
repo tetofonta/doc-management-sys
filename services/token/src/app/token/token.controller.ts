@@ -23,7 +23,7 @@ export class TokenController {
     @Patch('/')
     @UseGuards(JwtAuthGuard, FeatureGuard)
     @RequireFeatures(TokenRefreshFeature)
-    @HttpCode(204)
+    @HttpCode(200)
     public async refreshToken(
         @Req() req: Request,
         @Res({ passthrough: true }) res: Response,

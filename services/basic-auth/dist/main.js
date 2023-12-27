@@ -15,6 +15,6 @@ const config_1 = require("@dms/config");
     app.setGlobalPrefix(path.join(generalConfigs.basePath, 'api'));
     app.useGlobalPipes(new common_1.ValidationPipe({ transform: true }));
     app.useGlobalInterceptors(new common_1.ClassSerializerInterceptor(app.get(core_1.Reflector)));
-    await app.listen(generalConfigs.port);
+    await app.listen(generalConfigs.port, '0.0.0.0');
 })();
 //# sourceMappingURL=main.js.map

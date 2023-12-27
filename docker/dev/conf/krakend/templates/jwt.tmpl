@@ -1,0 +1,10 @@
+"auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "disable_jwk_security": true,
+    "cache": true,
+    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
+    "roles": {{ toJson (splitList " " .) }},
+    "operation_debug": true
+}

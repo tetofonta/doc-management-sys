@@ -25,18 +25,19 @@ export class AuthService {
         user.lastLogin = new Date();
         await user.save();
 
-        const raw_features = user.groups.map((e) => e.associated_features).flat();
-        const features = raw_features.map((f) => {
-            return raw_features
-                .filter((e) => e.startsWith(f) || f.startsWith(e))
-                .sort((a, b) => a.length - b.length)[0];
-        });
+        const raw_features: string[] = user.groups.map((e) => e.associated_features).flat();
+        const features = new Set(raw_features);
+        // const features = raw_features.map((f) => {
+        //     return raw_features
+        //         .filter((e) => e.startsWith(f) || f.startsWith(e))
+        //         .sort((a, b) => a.length - b.length)[0];
+        // });
 
         return this.auth.issueToken(
             user.id,
             user.username,
             user.superuser,
-            features,
+            [...features],
             user.groups.map((e) => e.name),
             res
         );

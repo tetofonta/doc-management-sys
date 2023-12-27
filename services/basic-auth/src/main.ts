@@ -15,5 +15,5 @@ import { getConfigKey } from '@dms/config';
     app.setGlobalPrefix(path.join(generalConfigs.basePath, 'api'));
     app.useGlobalPipes(new ValidationPipe({ transform: true }));
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
-    await app.listen(generalConfigs.port);
+    await app.listen(generalConfigs.port, '0.0.0.0');
 })();
