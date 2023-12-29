@@ -7,8 +7,12 @@ export default defineConfig({
     plugins: [react(), DynamicPublicDirectory(["./public", "../out"])],
     server: {
         host: true,
+        proxy: {
+            "/api": "http://localhost:8080",
+        },
     },
     base: "/",
+    cacheDir: "./cache",
     build: {
         minify: process.env.NODE_ENV == "production",
         sourcemap: process.env.NODE_ENV == "production" ? false : "inline",

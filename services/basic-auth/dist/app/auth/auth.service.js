@@ -37,7 +37,7 @@ let AuthService = class AuthService {
         await user.save();
         const raw_features = user.groups.map((e) => e.associated_features).flat();
         const features = new Set(raw_features);
-        return this.auth.issueToken(user.id, user.username, user.superuser, [...features], user.groups.map((e) => e.name), res);
+        return await this.auth.issueToken(user.id, user.username, user.superuser, [...features], user.groups.map((e) => e.name), res);
     }
 };
 exports.AuthService = AuthService;

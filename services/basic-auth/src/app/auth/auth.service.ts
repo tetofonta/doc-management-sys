@@ -4,7 +4,6 @@ import { Response, Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LocalUserEntity } from '../../persistence/entities/LocalUser.entity';
 import { Repository } from 'typeorm';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -33,7 +32,7 @@ export class AuthService {
         //         .sort((a, b) => a.length - b.length)[0];
         // });
 
-        return this.auth.issueToken(
+        return await this.auth.issueToken(
             user.id,
             user.username,
             user.superuser,

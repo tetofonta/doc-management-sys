@@ -24,6 +24,6 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-explicit-any": "warn",
-        "prettier/prettier": "warn",
+        "prettier/prettier": ["warn", {tabWidth: 4, printWidth: 130}],
     },
 };

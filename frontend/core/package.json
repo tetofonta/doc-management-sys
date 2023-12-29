@@ -2,7 +2,7 @@
   "name": "core",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --force",
     "build": "vite build",
     "serve": "vite preview",
     "type-check": "tsc --noEmit",
@@ -10,30 +10,31 @@
     "format": "prettier --write ./src"
   },
   "dependencies": {
+    "@dms/remote-component": "file:../@dms/remote-component",
+    "@mui/icons-material": "^5.15.2",
+    "@mui/material": "^5.15.2",
     "ra-data-json-server": "^4.16.0",
     "react": "^18.2.0",
     "react-admin": "^4.16.0",
-    "react-dom": "^18.2.0",
-    "@dms/remote-component": "file:../@dms/remote-component",
-    "@mui/material": "^5.15.2",
-    "@mui/icons-material": "^5.15.2"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "^5.60.1",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
     "@types/node": "^18.16.1",
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "@types/jsonwebtoken": "^9.0.5",
     "@vitejs/plugin-react": "^4.0.1",
-    "vite-multiple-assets": "^1.2.9",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-import": "^2.29.1",
     "prettier": "^3.1.1",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-multiple-assets": "^1.2.9"
   }
 }

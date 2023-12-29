@@ -17,24 +17,24 @@ export class RemoteElementBase extends HTMLElement {
 
     public connectedCallback() {
         console.debug(`Plugin ${this.component_id} loaded`);
+
         this.mountPoint = document.createElement('div');
+        // const shadowRoot = this.attachShadow({ mode: 'open' });
+        this.appendChild(this.mountPoint);
 
-        const shadowRoot = this.attachShadow({ mode: 'open' });
-        shadowRoot.appendChild(this.mountPoint);
-
-        this.reactRoot = ReactDOM.createRoot(shadowRoot);
-        retargetEvents(shadowRoot);
+        this.reactRoot = ReactDOM.createRoot(this.mountPoint);
+        // retargetEvents(shadowRoot);
 
         this.dispatchEvent(new Event(`${this.component_id}:loaded`));
-    }
-
-    protected build_element(props: { [k: string]: unknown }) {
-        console.log(props);
-        return React.createElement(this.component, props);
     }
 
     public renderElement() {
         const c = this.build_element(this.props);
         this.reactRoot.render(<React.StrictMode>{c}</React.StrictMode>);
+    }
+
+    protected build_element(props: { [k: string]: unknown }) {
+        console.log(props);
+        return React.createElement(this.component, props);
     }
 }

@@ -1,0 +1,7 @@
+{
+  "basic": {
+    "title": "Password Login",
+    "description": "Local username and password Login",
+    "component": "auth-basic-login"
+  }
+}

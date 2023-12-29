@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import {buildManifest} from "@dms/vite-plugin-remote-component"
 
-
 // @ts-ignore
 import * as pkg from "./package.json"
 
@@ -21,7 +20,6 @@ export default defineConfig({
     server: {
         host: true,
         port: 5173,
-
     },
     base,
     build: {
