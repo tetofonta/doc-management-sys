@@ -1,5 +1,5 @@
 cache: false
-host: localhost
+host: postgres
 port: 5432
 synchronize: true
 logging: true

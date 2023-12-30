@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useAuthProvider, useLogin } from "react-admin";
 import { ApplicationAuthProvider } from "../../providers/authProvider";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";

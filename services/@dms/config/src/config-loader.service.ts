@@ -113,15 +113,16 @@ export class ConfigLoaderService {
         }, o);
 
         //create the class
-        const ret = plainToInstance(clazz, secret_o);
+        const ret = plainToInstance(clazz, secret_o, {
+            exposeDefaultValues: true,
+            enableImplicitConversion: false,
+        });
         const errors: ValidationError[] = await validate(ret as object);
 
         if (errors.length == 0) return ret;
 
         this.logger.error(`Validation error!`);
-        this.logger.error(
-            '==================================\n' + validationErrorToString(errors)
-        );
+        this.logger.error('==================================\n' + validationErrorToString(errors));
         throw Error('Config load error');
     }
 }

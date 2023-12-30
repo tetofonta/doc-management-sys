@@ -1,5 +1,5 @@
 import { JwtModuleOptions } from '@nestjs/jwt';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, ValidateIf, ValidateNested } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateIf, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
 import { JwtVerifyOptions } from './JwtVerifyOptions';
 import { JwtSignOptions } from './JwtSignOptions';
@@ -23,10 +23,10 @@ export class JwtConfig implements JwtModuleOptions {
     signOptions?: JwtSignOptions;
 
     @IsNumber()
-    @IsOptional()
-    token_expiration_seconds?: number = 4 * 60 * 60;
+    @IsDefined()
+    token_expiration_seconds: number = 4 * 60 * 60;
 
     @IsNumber()
-    @IsOptional()
-    refresh_token_extension_seconds?: number = 5 * 60;
+    @IsDefined()
+    refresh_token_extension_seconds: number = 5 * 60;
 }

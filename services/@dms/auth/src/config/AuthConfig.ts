@@ -1,5 +1,5 @@
 import { IsNotEmpty, ValidateNested, IsString, IsDefined } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Expose, Type } from 'class-transformer';
 import { JwtConfig } from './JwtConfig';
 
 export class AuthConfig {

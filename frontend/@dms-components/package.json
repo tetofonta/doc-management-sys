@@ -1,0 +1,11 @@
+{
+  "name": "@dms/frontend-components",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "echo 0"
+  },
+  "dependencies": {
+    "@dms-components/auth-basic-login": "file:./auth-basic-login",
+    "@dms-components/test-remote-component": "file:./test-remote-component"
+  }
+}

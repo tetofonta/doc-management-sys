@@ -3,7 +3,6 @@
     "method": "POST",
     "output_encoding": "no-op",
     "backend": [{
-        "encoding": "no-op",
         "url_pattern": "{{ .auth.methods.basic.base_path }}/auth/",
         "method": "POST",
         "host": [ "{{ .auth.methods.basic.backend }}" ]

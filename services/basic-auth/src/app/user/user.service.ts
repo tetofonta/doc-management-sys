@@ -15,6 +15,7 @@ export class UserService {
         @InjectRepository(LocalGroupEntity) private readonly groupRepository: Repository<LocalGroupEntity>,
         @InjectConfig(DMSAuthConfig) private readonly config: DMSAuthConfig
     ) {
+        console.log(this.config)
         this.init().then();
     }
 

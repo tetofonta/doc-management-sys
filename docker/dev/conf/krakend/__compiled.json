@@ -28,7 +28,7 @@
     "backend": [{
         "url_pattern": "/api/token/",
         "method": "GET",
-        "host": [ "http://10.128.0.109:7100" ]
+        "host": [ "http://api-token-dev:7100" ]
     }],
     "extra_config": {
         "auth/validator": {
@@ -52,7 +52,7 @@
         "encoding": "no-op",
         "url_pattern": "/api/token/",
         "method": "PATCH",
-        "host": [ "http://10.128.0.109:7100" ]
+        "host": [ "http://api-token-dev:7100" ]
     }],
     "extra_config": {
         "auth/validator": {
@@ -72,10 +72,9 @@
     "method": "POST",
     "output_encoding": "no-op",
     "backend": [{
-        "encoding": "no-op",
         "url_pattern": "/api/auth/",
         "method": "POST",
-        "host": [ "http://10.128.0.109:7101" ]
+        "host": [ "http://api-basic-auth-dev:7101" ]
     }]
 }
   ]

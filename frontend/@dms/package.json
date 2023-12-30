@@ -1,0 +1,11 @@
+{
+  "name": "@dms/frontend-libraries",
+  "version": "0.0.0",
+  "scripts": {
+    "build": "echo 0"
+  },
+  "dependencies": {
+    "@dms/remote-component": "file:./remote-component",
+    "@dms/vite-plugin-remote-component": "file:./vite-plugin-remote-component"
+  }
+}

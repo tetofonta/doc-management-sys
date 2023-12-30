@@ -20,7 +20,7 @@ export class AuthorizerService {
         features: string[] | null,
         groups: string[],
         res: Response
-    ): Promise<void> {
+    ): Promise<{ token: string; refresh_token: string; payload: TokenPayload }> {
         const payload: TokenPayload = {
             userId: user_id,
             userName: user_name,
@@ -51,6 +51,7 @@ export class AuthorizerService {
 
         res.header(this.configs.token_header, token);
         res.header(this.configs.refresh_token_header, refresh_token);
+        return { token, refresh_token, payload };
     }
 
     public async refreshToken(req: Request, res: Response): Promise<void> {
@@ -80,6 +81,13 @@ export class AuthorizerService {
             throw new NotAcceptableException('sibling hash is not valid');
 
         const old_content = this.jwtService.decode(old_token) as TokenPayload;
-        await this.issueToken(old_content.userId, old_content.userName, old_content.superuser, old_content.features, old_content.groups, res);
+        await this.issueToken(
+            old_content.userId,
+            old_content.userName,
+            old_content.superuser,
+            old_content.features,
+            old_content.groups,
+            res
+        );
     }
 }

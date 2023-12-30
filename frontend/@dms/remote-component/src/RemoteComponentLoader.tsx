@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { RemoteElementBase } from './RemoteComponents/RemoteElementBase';
 
 export type RemoteComponentDescriptor = {
-    main: { index: string; integrity: string };
-    style: { index: string; integrity: string }[];
+    main: { index: string; integrity?: string };
+    style: { index: string; integrity?: string }[];
 };
 
 export type TestCreateRemoteProps = {
@@ -35,13 +35,15 @@ export const RemoteComponentLoader = (props: TestCreateRemoteProps) => {
             elm.id = `__remote_component_${component_id}`;
             elm.type = 'module';
             elm.defer = true;
-            elm.integrity = component_manifest.main.integrity;
+            if (component_manifest?.main?.integrity) elm.integrity = component_manifest.main.integrity;
+            else console.warn(`External remote component ${component_id}@${component_manifest?.main?.index} without integrity. This is not safe.`);
 
             for (const css of component_manifest.style) {
                 const elm = document.createElement('link');
                 elm.rel = 'stylesheet';
                 elm.href = css.index;
-                elm.integrity = css.integrity;
+                if (css?.integrity) elm.integrity = css.integrity;
+                else console.warn(`External remote component asset ${css.index} without integrity. This is not safe.`);
                 document.body.appendChild(elm);
             }
 

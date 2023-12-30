@@ -7,9 +7,14 @@ import { AuthModule } from '@dms/auth/lib/auth.module';
 import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
 import { TokenModule } from './token/token.module';
 import { WellKnownController } from './well-known.controller';
+import { DevtoolsModule } from '@nestjs/devtools-integration';
 
 @Module({
     imports: [
+        DevtoolsModule.register({
+            http: process.env.NODE_ENV !== 'production',
+            port: 8000,
+        }),
         ConfigLoaderModule.forRoot(appConfigSettings),
         AuthModule.forRootAsync({
             imports: [ConfigLoaderModule.forFeatures(DMSAuthConfig)],

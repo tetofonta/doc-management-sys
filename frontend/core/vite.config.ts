@@ -12,7 +12,6 @@ export default defineConfig({
         },
     },
     base: "/",
-    cacheDir: "./cache",
     build: {
         minify: process.env.NODE_ENV == "production",
         sourcemap: process.env.NODE_ENV == "production" ? false : "inline",

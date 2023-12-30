@@ -1,4 +1,5 @@
 services:
+
   postgres:
     image: postgres:alpine
     restart: 'no'
@@ -9,14 +10,46 @@ services:
       - ./bootstrap/postgres:/docker-entrypoint-initdb.d:ro
     ports:
       - 5432:5432
+
   krakend:
     image: devopsfaith/krakend:2.5-watch
     restart: 'no'
     command: ["run", "-dc", "krakend.tmpl"]
-    network_mode: host
     env_file:
       - env/krakend.env
     ports:
       - 8080:8080
     volumes:
       - ./conf/krakend:/etc/krakend
+
+  api-token-dev:
+    image: node:current-alpine
+    restart: 'no'
+    entrypoint: "npm"
+    command: ["run", "start:dev"]
+    env_file:
+      - env/token.env
+    volumes:
+      - ../../services:/devroot
+    user: "1000:1000"
+    working_dir: /devroot/token
+    ports:
+      - 7100:7100
+      - 9200:9200
+
+  api-basic-auth-dev:
+    image: node:current-alpine
+    restart: 'no'
+    entrypoint: "npm"
+    command: [ "run", "start:dev" ]
+    env_file:
+      - env/basic-auth.env
+    volumes:
+      - ../../services:/devroot
+    user: "1000:1000"
+    working_dir: /devroot/basic-auth
+    ports:
+      - 7101:7101
+      - 9201:9201
+
+

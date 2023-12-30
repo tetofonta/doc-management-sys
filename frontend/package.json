@@ -1,0 +1,26 @@
+{
+  "name": "dms-frontend",
+  "private": true,
+  "dependencies": {
+    "@dms/libs": "file:./@dms",
+    "@dms/components": "file:./@dms-components",
+    "@dms/frontend": "file:./core"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "@typescript-eslint/eslint-plugin": "^5.60.1",
+    "@typescript-eslint/parser": "^5.60.1",
+    "@vitejs/plugin-react": "^4.0.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.1.6",
+    "vite": "^4.3.9",
+    "vite-multiple-assets": "^1.2.9",
+    "sass": "^1.69.6"
+  }
+}

@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="token" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" port="9200" restartOnDisconnect="true">
+    <mapping url="http://localhost:9201/devroot" local-file="$PROJECT_DIR$/services/" />
+    <method v="2" />
+  </configuration>
+</component>

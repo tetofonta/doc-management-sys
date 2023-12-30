@@ -11,6 +11,9 @@
       <excludeFolder url="file://$MODULE_DIR$/raw" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/@dms/vite-plugin-remote-component/dist" />
       <excludeFolder url="file://$MODULE_DIR$/frontend/@dms/vite-plugin-remote-component/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/services/@dms/auth/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/services/@dms/crud/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/services/basic-auth/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
