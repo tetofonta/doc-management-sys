@@ -1,10 +1,7 @@
 import "./css/MessageBox.sass";
 import { Alert, AlertColor, Avatar, Box, Typography } from "@mui/material";
-import {
-    ErrorOutlined,
-    InfoOutlined,
-    WarningOutlined,
-} from "@mui/icons-material";
+import { ErrorOutlined, InfoOutlined, WarningOutlined } from "@mui/icons-material";
+import React from "react";
 
 export enum MessageDialogType {
     ERROR = "Error",
@@ -14,7 +11,7 @@ export enum MessageDialogType {
 
 export type MessageBoxProps = {
     title?: string;
-    message?: string;
+    message?: string | React.ReactNode;
     type?: MessageDialogType;
     small?: boolean;
 };
@@ -36,10 +33,7 @@ export const MessageBox = (props: MessageBoxProps) => {
             {icon}
             <Typography variant="h5">{props.title}</Typography>
             {props.message && (
-                <Alert
-                    className="bodyContainer"
-                    severity={type.toString().toLowerCase() as AlertColor}
-                >
+                <Alert className="bodyContainer" severity={type.toString().toLowerCase() as AlertColor}>
                     {props.message}
                 </Alert>
             )}

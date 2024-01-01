@@ -43,6 +43,11 @@ export const Component = (props: {
                                 res.headers.get("X-Refresh-Token") || "",
                         })
                         setLoggingIn(false);
+                    } else {
+                        setLoginError(
+                            `Login failed`
+                        );
+                        setLoggingIn(false);
                     }
                 })
                 .catch((e) => {

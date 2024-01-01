@@ -1,14 +1,16 @@
-import { Resource, ResourceProps } from "react-admin";
-import { ApplicationAuthProvider, FeatureSet } from "../../providers/authProvider";
+import { Resource, ResourceProps, useAuthProvider } from "react-admin";
+import { ApplicationAuthProvider } from "../../providers/auth/authProvider";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";
+import { FeatureSet } from "../../providers/auth/Feature";
 
 export type AuthenticatedResourceType = ResourceProps & {
     requiredFeatures: FeatureSet<string>[];
 };
 const AuthenticatedResource = function (props: AuthenticatedResourceType) {
     const { requiredFeatures, ...oth } = props;
+    const auth = useAuthProvider();
 
-    if (!ApplicationAuthProvider.hasPermissions(...requiredFeatures)) {
+    if (!auth.hasPermissions(...requiredFeatures)) {
         return (
             <MessageBox
                 title={"Permission error"}
@@ -22,8 +24,8 @@ const AuthenticatedResource = function (props: AuthenticatedResourceType) {
 
 AuthenticatedResource.raName = "Resource";
 AuthenticatedResource.registerResource = (props: AuthenticatedResourceType) => {
-    const access = ApplicationAuthProvider.hasPermissions(...props.requiredFeatures);
-    console.log("access", access)
+    const access = ApplicationAuthProvider.getInstance().hasPermissions(...props.requiredFeatures);
+    console.log("access", access);
 
     return {
         name: props.name,

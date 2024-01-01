@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useAuthProvider, useLogin } from "react-admin";
-import { ApplicationAuthProvider } from "../../providers/authProvider";
+import { ApplicationAuthProvider } from "../../providers/auth/authProvider";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";
 import { Box, Button, CircularProgress, List, ListItemButton, ListItemIcon, ListItemText, Slide } from "@mui/material";
 import { ArrowLeft, Login } from "@mui/icons-material";
