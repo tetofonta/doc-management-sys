@@ -9,11 +9,19 @@ export enum MessageDialogType {
     INFO = "Info",
 }
 
+export enum MessageDialogSize {
+    SMALL = "Sm",
+    MEDIUM = "Md",
+    LARGE = "Lg",
+    UNRESTRICTED = "Unrestricted",
+}
+
 export type MessageBoxProps = {
     title?: string;
     message?: string | React.ReactNode;
     type?: MessageDialogType;
     small?: boolean;
+    size?: MessageDialogSize;
 };
 
 export const MessageBox = (props: MessageBoxProps) => {
@@ -29,7 +37,7 @@ export const MessageBox = (props: MessageBoxProps) => {
     if (props.small) return icon;
 
     return (
-        <Box className="messageContainer">
+        <Box className={`messageContainer messageContainer${props.size?.toString() || "Sm"}`}>
             {icon}
             <Typography variant="h5">{props.title}</Typography>
             {props.message && (

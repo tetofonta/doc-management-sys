@@ -21,6 +21,7 @@
     "typescript": "^5.1.6",
     "vite": "^4.3.9",
     "vite-multiple-assets": "^1.2.9",
-    "sass": "^1.69.6"
+    "sass": "^1.69.6",
+    "ra-data-json-server": "^4.16.3"
   }
 }

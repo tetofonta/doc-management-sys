@@ -4,10 +4,6 @@ import React from "react";
 import { Loading } from "react-admin";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";
 
-export type RemoteComponentErrorProps = {
-    use_short_error?: boolean;
-    message: string;
-};
 export type RemoteComponentProps = {
     component_id: string;
     error?: (msg: string) => React.JSX.Element;
@@ -16,7 +12,7 @@ export type RemoteComponentProps = {
     use_short_error?: boolean;
 };
 
-export const RemoteComponent = ({ component_id, error, load, use_short_error, ...oth }: RemoteComponentProps) => {
+const RemoteComponent = ({ component_id, error, load, use_short_error, ...oth }: RemoteComponentProps) => {
     const components = useRemoteComponentsContext();
 
     const err_msg = `The required component id cannot be found (${component_id})`;
@@ -42,3 +38,5 @@ export const RemoteComponent = ({ component_id, error, load, use_short_error, ..
         />
     );
 };
+
+export default RemoteComponent;

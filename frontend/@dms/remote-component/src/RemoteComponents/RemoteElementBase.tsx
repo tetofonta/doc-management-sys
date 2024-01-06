@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM, { Root } from 'react-dom/client';
-import retargetEvents from 'react-shadow-dom-retarget-events';
 
 export class RemoteElementBase extends HTMLElement {
     public reactRoot!: Root;
@@ -9,7 +8,7 @@ export class RemoteElementBase extends HTMLElement {
 
     /* eslint-disable @typescript-eslint/no-explicit-any */
     constructor(
-        private readonly component: (props: { [k: string]: unknown }) => any,
+        protected readonly component: (props: { [k: string]: unknown }) => any,
         private readonly component_id: string
     ) {
         super();
@@ -33,7 +32,7 @@ export class RemoteElementBase extends HTMLElement {
         this.reactRoot.render(<React.StrictMode>{c}</React.StrictMode>);
     }
 
-    protected build_element(props: { [k: string]: unknown }) {
+    protected build_element(props: { [k: string]: unknown }): React.ReactNode {
         console.log(props);
         return React.createElement(this.component, props);
     }

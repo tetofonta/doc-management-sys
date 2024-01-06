@@ -33,7 +33,7 @@ export class ApplicationAuthProvider implements AuthProvider {
     public hasPermissions(...perm: FeatureSet<string>[]): boolean {
         const { status, data } = this.getAuthData();
         if (!status) return false;
-        const res = perm.some((e) => Feature.eval(new Set(data.payload.features), e));
+        const res = perm.length == 0 || perm.some((e) => Feature.eval(new Set(data.payload.features), e));
         console.debug("Checking permissions", perm, data.payload.superuser, res);
         return data.payload.superuser || res;
     }

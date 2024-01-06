@@ -7,8 +7,9 @@ import {buildManifest} from "@dms/vite-plugin-remote-component"
 import * as pkg from "./package.json"
 
 const base = `/components/${pkg.name}`
-const outDir = `../out/components/${pkg.name}/`;
-const componentBase = `../out/components/`;
+const outDir = `../../out/components/${pkg.name}/`;
+const componentBase = `../../out/components/`;
+
 
 // https://vitejs.dev/config/
 export default defineConfig({

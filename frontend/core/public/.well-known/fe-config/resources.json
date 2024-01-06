@@ -1,0 +1,10 @@
+{
+  "auth-basic-user-resource": {
+    "label": "Local Users",
+    "record_representation": ".username",
+    "list": {
+      "component": "auth-basic-user-list",
+      "toolbar": ["auth-basic-user-create"]
+    }
+  }
+}
