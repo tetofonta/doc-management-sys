@@ -1,5 +1,4 @@
 import {
-    ArgumentMetadata,
     ExecutionContext,
     ForbiddenException,
     Inject,
@@ -9,8 +8,8 @@ import {
     Type,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { TokenPayload } from '../proto_types/token/auth-token';
 import { DMS_AUTH_FEATURES_INJECT_KEY, DMS_AUTH_REQUEST_FEATURES_METADATA_KEY } from '../constants';
+import { TokenPayload } from '../proto_types/token/auth-token';
 
 @Injectable()
 export class FeatureInjectPipe implements PipeTransform {
@@ -41,7 +40,7 @@ export class FeatureInjectPipe implements PipeTransform {
 
         const ret = ret_features
             // .filter((e) => value.tokenData.features.some((f) => e.startsWith(f)))
-            .filter((e) => value.tokenData.features.includes(e))
+            .filter((e) => value.tokenData.features.includes(e) || value.tokenData.superuser)
             .map((e) => ({ name: e, value: this.features[e] }))
             .filter((e) => !!e.value);
 

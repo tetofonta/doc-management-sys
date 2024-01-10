@@ -14,6 +14,7 @@
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/auth/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/crud/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/basic-auth/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/docker/dev/volumes" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

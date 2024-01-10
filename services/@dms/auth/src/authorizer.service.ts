@@ -21,11 +21,12 @@ export class AuthorizerService {
         groups: string[],
         res: Response
     ): Promise<{ token: string; refresh_token: string; payload: TokenPayload }> {
+        const f = superuser ? ['__superuser__', ...features] : features;
         const payload: TokenPayload = {
             userId: user_id,
             userName: user_name,
             superuser,
-            features,
+            features: f,
             groups,
             siblingHash: undefined,
         };

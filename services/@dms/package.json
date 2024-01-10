@@ -8,6 +8,7 @@
     "@dms/auth": "file:./auth",
     "@dms/config": "file:./config",
     "@dms/persistence": "file:./persistence",
-    "@dms/crud": "file:./crud"
+    "@dms/crud": "file:./crud",
+    "@dms/http-base": "file:./http_base"
   }
 }

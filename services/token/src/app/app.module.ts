@@ -8,18 +8,21 @@ import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
 import { TokenModule } from './token/token.module';
 import { WellKnownController } from './well-known.controller';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { WebModule } from '@dms/http-base';
+import { AppWebConfig } from '../config/WebConfig';
 
 @Module({
     imports: [
-        DevtoolsModule.register({
-            http: process.env.NODE_ENV !== 'production',
-            port: 8000,
-        }),
         ConfigLoaderModule.forRoot(appConfigSettings),
         AuthModule.forRootAsync({
             imports: [ConfigLoaderModule.forFeatures(DMSAuthConfig)],
             inject: [getConfigKey(DMSAuthConfig)],
             useFactory: (conf: AuthConfig) => conf,
+        }),
+        WebModule.forRootAsync({
+            imports: [ConfigLoaderModule.forFeatures(AppWebConfig)],
+            inject: [getConfigKey(AppWebConfig)],
+            useFactory: (conf: AppWebConfig) => conf,
         }),
         TokenModule,
     ],

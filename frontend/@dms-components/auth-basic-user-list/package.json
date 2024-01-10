@@ -13,6 +13,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-admin": "^4.16.0",
+    "@mui/material": "^5.15.3",
+    "@mui/icons-material": "^5.15.2",
     "react-dom": "^18.2.0",
     "react-shadow-dom-retarget-events": "^1.1.0",
     "@dms/remote-component": "file:../@dms/remote-component"

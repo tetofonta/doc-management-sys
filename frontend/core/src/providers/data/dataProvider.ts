@@ -30,7 +30,14 @@ export class ApplicationDataProvider implements DataProvider {
         private readonly apiRoot: string,
         private readonly fetchFunc?: any,
     ) {
-        if (!this.fetchFunc) this.fetchFunc = ApplicationAuthProvider.getInstance().fetchJson;
+        if (!this.fetchFunc)
+            this.fetchFunc = (
+                input: string | URL | Request,
+                init?: RequestInit & {
+                    retryDisallowed: boolean;
+                    refreshDisallowed: boolean;
+                },
+            ) => ApplicationAuthProvider.getInstance().fetchJson(input, init);
     }
 
     public async getList<T extends RaRecord<Identifier> = any>(
@@ -41,7 +48,7 @@ export class ApplicationDataProvider implements DataProvider {
         const url = `${this.apiRoot}/${resource}/?${querystring.stringify(query, { arrayFormat: "bracket" })}`;
         const { json, headers } = await this.fetchFunc(url, { method: "GET" });
         return {
-            data: json,
+            data: json.result,
             total: parseInt(headers.get("content-range").split("/").pop(), 10),
         };
     }
@@ -59,10 +66,10 @@ export class ApplicationDataProvider implements DataProvider {
         resource: string,
         params: GetManyParams,
     ): Promise<GetManyResult<T>> {
-        const query = this.filterParameterName("id", params.ids);
+        const query = this.filterParameterName(params.ids.map((id) => ({ id })));
         const url = `${this.apiRoot}/${resource}/?${querystring.stringify(query, { arrayFormat: "bracket" })}`;
         const { json } = await this.fetchFunc(url);
-        return { data: json };
+        return { data: json.result };
     }
 
     public async getManyReference<T extends RaRecord<Identifier> = any>(
@@ -76,7 +83,7 @@ export class ApplicationDataProvider implements DataProvider {
         })}`;
         const { json, headers } = await this.fetchFunc(url, { method: "GET" });
         return {
-            data: json,
+            data: json.result,
             total: parseInt(headers.get("content-range").split("/").pop(), 10),
         };
     }
@@ -87,6 +94,7 @@ export class ApplicationDataProvider implements DataProvider {
     ): Promise<CreateResult<T>> {
         const { json } = await this.fetchFunc(`${this.apiRoot}/${resource}/`, {
             method: "POST",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(params.data),
         });
         return { data: json };
@@ -98,6 +106,7 @@ export class ApplicationDataProvider implements DataProvider {
     ): Promise<UpdateResult<T>> {
         const { json } = await this.fetchFunc(`${this.apiRoot}/${resource}/`, {
             method: "PATCH",
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(params.data),
         });
         return { data: json };
@@ -107,11 +116,12 @@ export class ApplicationDataProvider implements DataProvider {
         resource: string,
         params: UpdateManyParams<T>,
     ): Promise<UpdateManyResult<T>> {
-        const query = this.filterParameterName("id", params.ids);
+        const query = this.filterParameterName(params.ids.map((id) => ({ id })));
         const { json } = await this.fetchFunc(
             `${this.apiRoot}/${resource}/?${querystring.stringify(query, { arrayFormat: "bracket" })}`,
             {
                 method: "PATCH",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(params.data),
             },
         );
@@ -132,7 +142,7 @@ export class ApplicationDataProvider implements DataProvider {
         resource: string,
         params: DeleteManyParams<T>,
     ): Promise<DeleteManyResult<T>> {
-        const query = this.filterParameterName("id", params.ids);
+        const query = this.filterParameterName(params.ids.map((id) => ({ id })));
         const { json } = await this.fetchFunc(
             `${this.apiRoot}/${resource}/?${querystring.stringify(query, { arrayFormat: "bracket" })}`,
             {
@@ -142,41 +152,34 @@ export class ApplicationDataProvider implements DataProvider {
         return { data: json };
     }
 
+    private zip<T, V>(arr1: T[], arr2: V[]): [T | undefined, V | undefined][] {
+        const bigger_len = Math.max(arr1.length, arr2.length);
+        const ret = Array(bigger_len);
+        for (let i = 0; i < bigger_len; i++) {
+            ret[i] = [i < arr1.length ? arr1[i] : undefined, i < arr2.length ? arr2[i] : undefined];
+        }
+        return ret;
+    }
+
     private prepareListQuery(params: GetListParams) {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
+        const sort_match = this.zip([field], [order]).filter((e) => !!e[0]);
 
-        const query = {
-            offset: (page - 1) * perPage,
-            take: perPage,
-            sort: [field],
-            sortDir: [order],
-        };
         return Object.assign(
-            query,
-            Object.keys(params.filter).reduce((a, b) => Object.assign(a, this.filterParameterName(b, params.filter[b])), {}),
+            {
+                offset: (page - 1) * perPage,
+                take: perPage,
+                sortAsc: sort_match.filter((e) => e[1] == "ASC" || !e[1]).map((e) => e[0]),
+                sortDesc: sort_match.filter((e) => e[1] == "DESC").map((e) => e[0]),
+            },
+            this.filterParameterName(params.filter),
         );
     }
 
-    private filterParameterName(
-        filter_key: string,
-        filter_value:
-            | string
-            | number
-            | boolean
-            | (string | number | boolean)[]
-            | {
-                  op: "GT" | "LT" | "GTE" | "LTE" | "LIKE" | "EQ";
-                  value: string | number | boolean | (string | number | boolean)[];
-              },
-    ): object {
-        let operator = "";
-        let val = filter_value;
-        if (typeof filter_value == "object" && !Array.isArray(filter_value)) {
-            if (filter_value.op != "EQ") operator = `_${filter_value.op.toLowerCase()}`;
-            val = filter_value.value;
-        }
-        if (Array.isArray(val)) val = val.map((e) => e.toString());
-        return { [`q${operator}${filter_key}`]: val };
+    private filterParameterName(filter_obj: any | any[]) {
+        return {
+            filters: Array.isArray(filter_obj) ? filter_obj.map((e) => JSON.stringify(e)) : [JSON.stringify(filter_obj)],
+        };
     }
 }

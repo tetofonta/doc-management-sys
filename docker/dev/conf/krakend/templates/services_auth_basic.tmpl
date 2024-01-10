@@ -7,4 +7,104 @@
         "method": "POST",
         "host": [ "{{ .auth.methods.basic.backend }}" ]
     }]
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-users/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/user/",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localuser, localuser:list" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-users/{id}/",
+    "method": "GET",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/user/{id}/",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localuser, localuser:get" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-users/",
+    "method": "POST",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/user/",
+        "method": "POST",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization", "Content-Length", "Content-Type"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localuser, localuser:admin, localuser:admin:create" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-users/{id}/local-groups/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/group/?filter[]=%7b%22user.id%22%3a+%22{id}%22%7d",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localgroup, localgroup:list" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-groups/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/group/",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localgroup, localgroup:list" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-groups/{id}/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/group/{id}/",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localgroup, localgroup:get" }}
+    }
+},
+{
+    "endpoint": "{{ .general.base_path }}/local-groups/{id}/local-users/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "backend": [{
+        "url_pattern": "{{ .auth.methods.basic.base_path }}/user/?filter[]=%7b%22groups.id%22%3a+%22{id}%22%7d",
+        "method": "GET",
+        "host": [ "{{ .auth.methods.basic.backend }}" ]
+    }],
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "extra_config": {
+        {{ template "jwt.tmpl" "localuser, localuser:list" }}
+    }
 }

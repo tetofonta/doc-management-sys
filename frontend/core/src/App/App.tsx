@@ -11,6 +11,7 @@ import ApplicationLayout from "./Layout/ApplicationLayout";
 import jsonServerProvider from "ra-data-json-server";
 import RemoteResource from "./Resources/RemoteResource/RemoteResource";
 import RemoteRaComponent from "./Remote/RemoteRaComponent";
+import { ApplicationDataProvider } from "../providers/data/dataProvider";
 
 export const App = () => {
     /* prepare remote components context */
@@ -29,8 +30,7 @@ export const App = () => {
                 {!remoteComponentsManifest && <CircularProgress />}
                 {remoteComponentsManifest && (
                     <Admin
-                        // dataProvider={new ApplicationDataProvider("/api")}
-                        dataProvider={jsonServerProvider("https://jsonplaceholder.typicode.com")}
+                        dataProvider={new ApplicationDataProvider("/api")}
                         authProvider={ApplicationAuthProvider.getInstance()}
                         loginPage={LoginPage}
                         layout={ApplicationLayout}
@@ -38,14 +38,24 @@ export const App = () => {
                         requireAuth
                     >
                         {/* Load our collections */}
+
+                        {/* Load additional collections from remote component*/}
                         <RemoteResource
-                            name={"users"}
+                            name={"local-users"}
+                            options={{ label: "Local Users" }}
                             list={() => <RemoteRaComponent component_id="auth-basic-user-list" load={<Loading />} />}
+                            show={() => <RemoteRaComponent component_id="auth-basic-user-detail" load={<Loading />} />}
+                            create={() => <RemoteRaComponent component_id="auth-basic-user-create" load={<Loading />} />}
                             // list={ListGuesser}
                             edit={EditGuesser}
                         />
 
-                        {/* Load additional collections from remote component*/}
+                        <RemoteResource
+                            name={"local-groups"}
+                            options={{ label: "Local Groups" }}
+                            list={() => <RemoteRaComponent component_id="auth-basic-group-list" load={<Loading />} />}
+                            show={() => <RemoteRaComponent component_id="auth-basic-group-detail" load={<Loading />} />}
+                        />
 
                         {/* Load custom routes */}
                         <CustomRoutes>

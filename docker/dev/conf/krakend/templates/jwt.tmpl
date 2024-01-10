@@ -5,6 +5,6 @@
     "disable_jwk_security": true,
     "cache": true,
     "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": {{ toJson (splitList " " .) }},
+    "roles": {{ toJson (uniq ( prepend (splitList " " .) "__superuser__") ) }},
     "operation_debug": true
 }

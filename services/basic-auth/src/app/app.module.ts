@@ -8,6 +8,9 @@ import { DMSAuthModule } from './auth/auth.module';
 import { AuthModule } from '@dms/auth/lib/auth.module';
 import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
 import { UserModule } from './user/user.module';
+import { GroupModule } from './group/group.module';
+import { WebModule } from '@dms/http-base';
+import { AppWebConfig } from '../config/WebConfig';
 
 @Module({
     imports: [
@@ -17,9 +20,15 @@ import { UserModule } from './user/user.module';
             inject: [getConfigKey(DMSAuthConfig)],
             useFactory: (conf: AuthConfig) => conf,
         }),
+        WebModule.forRootAsync({
+            imports: [ConfigLoaderModule.forFeatures(AppWebConfig)],
+            inject: [getConfigKey(AppWebConfig)],
+            useFactory: (conf: AppWebConfig) => conf,
+        }),
         DMSPersistenceModule,
         DMSAuthModule,
         UserModule,
+        GroupModule,
     ],
 })
 export class AppModule {}
