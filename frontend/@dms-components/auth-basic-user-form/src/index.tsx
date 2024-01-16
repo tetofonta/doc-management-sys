@@ -4,7 +4,7 @@ import * as pkg from "../package.json"
 
 export class AuthBasicUserCreate extends RemoteRaComponentBase{
     constructor() {
-        super(Component, pkg.name);
+        super(Component as any, pkg.name);
     }
 
 }

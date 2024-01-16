@@ -1,5 +1,5 @@
 {
-  "name": "auth-basic-user-create",
+  "name": "auth-basic-user-form",
   "private": true,
   "scripts": {
     "dev": "vite",
