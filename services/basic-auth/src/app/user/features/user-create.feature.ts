@@ -1,16 +1,35 @@
 import { Feature } from '@dms/auth/lib/decorators/feature.decorator';
 import { LocalUserEntity } from '../../../persistence/entities/LocalUser.entity';
-import { DetailFeature, ListFeature } from '@dms/crud';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CreateFeature } from '@dms/crud';
+import { LocalGroupEntity } from '../../../persistence/entities/LocalGroup.entity';
+import { DeepPartial } from 'typeorm';
 
 @Feature('localuser:admin:create', {
-    imports: [TypeOrmModule.forFeature([LocalUserEntity])],
+    imports: [TypeOrmModule.forFeature([LocalUserEntity, LocalGroupEntity])],
 })
-export class LocalUserCreateFeature {
-    constructor(@InjectRepository(LocalUserEntity) private readonly userRepository: Repository<LocalUserEntity>) {}
+export class LocalUserCreateFeature extends CreateFeature<LocalUserEntity> {
+    constructor(
+        @InjectRepository(LocalUserEntity) private readonly userRepository: Repository<LocalUserEntity>,
+        @InjectRepository(LocalGroupEntity) private readonly groupRepository: Repository<LocalGroupEntity>
+    ) {
+        super(userRepository);
+    }
 
-    public async create(body: LocalUserEntity) {
-        console.log(body);
+    protected async makeObject(body: DeepPartial<LocalUserEntity>): Promise<DeepPartial<LocalUserEntity>> {
+        if (!body.password) body.password = Math.random().toString(26).substring(2);
+
+        if (body.groups) {
+            body.groups = await this.groupRepository.find({
+                where: body.groups
+                    .map((e: LocalGroupEntity) => ({
+                        id: e.id,
+                    }))
+                    .filter((e) => !!e.id),
+            });
+        }
+
+        return body;
     }
 }

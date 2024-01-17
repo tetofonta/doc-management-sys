@@ -1,0 +1,22 @@
+{
+  "name": "external-element",
+  "private": true,
+  "main": "src/lib.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-shadow-dom-retarget-events": "^1.1.0",
+    "react-admin": "^4.16.5",
+    "@dms/modal-context": "file:../modal-context",
+    "@mui/material": "^5.15.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "@types/react": "^18.0.22",
+    "@types/react-dom": "^18.0.7",
+    "@types/react-shadow-dom-retarget-events":"^1.0.2"
+  }
+}

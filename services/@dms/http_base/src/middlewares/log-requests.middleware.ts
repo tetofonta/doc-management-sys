@@ -17,11 +17,11 @@ export class HTTPLoggerMiddleware implements NestMiddleware {
         const req_id = this.request_id;
         const time = Date.now();
 
-        this.logger.log(
-            `Incoming request:  ${req_id} ${method} ${decodeURIComponent(url)} - ${userAgent} ${ip} ${JSON.stringify(
-                body || {}
-            )} ${JSON.stringify(headers || {})}`
-        );
+        this.logger.log(`Incoming request:  ${req_id} ${method} ${decodeURIComponent(url)} - ${userAgent} ${ip}`);
+        if (this.config.debug_requests) {
+            this.logger.debug(`BODY: ${JSON.stringify(body || {})}`);
+            this.logger.debug(`HEADERS: ${JSON.stringify(headers || {})}`);
+        }
 
         response.on('close', () => {
             const { statusCode } = response;

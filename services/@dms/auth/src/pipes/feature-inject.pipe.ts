@@ -39,12 +39,13 @@ export class FeatureInjectPipe implements PipeTransform {
         }
 
         const ret = ret_features
-            // .filter((e) => value.tokenData.features.some((f) => e.startsWith(f)))
-            .filter((e) => value.tokenData.features.includes(e) || value.tokenData.superuser)
+            .filter((e) => value.tokenData.features.some((f) => e.startsWith(f) || value.tokenData.superuser))
+            // .filter((e) => value.tokenData.features.includes(e) || value.tokenData.superuser)
             .map((e) => ({ name: e, value: this.features[e] }))
             .filter((e) => !!e.value);
 
-        if (ret.length == 0) throw new ForbiddenException(`User does not possess the feature ${value.wanted}`);
+        if (ret.length == 0)
+            throw new ForbiddenException(`User does not possess the feature ${value.wanted}`);
 
         if (value.wanted) return ret[0].value;
         else return ret.reduce((a, b) => Object.assign(a, { [b.name]: b.value }));
@@ -52,7 +53,7 @@ export class FeatureInjectPipe implements PipeTransform {
 
     private hasFeature(features: string[], feature: string, superuser: boolean): boolean {
         if (superuser) return true;
-        // return features.some((e) => e.startsWith(feature));
-        return features.includes(feature);
+        return features.some((e) => e.startsWith(feature));
+        // return features.includes(feature);
     }
 }

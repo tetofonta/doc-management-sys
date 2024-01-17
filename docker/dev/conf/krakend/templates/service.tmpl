@@ -1,0 +1,9 @@
+{{- range $index, $service := .services -}}
+    {{- $endpoints := $service.endpoints -}}
+    {{- $service_data := unset $service "endpoints" -}}
+    {{- if $index -}},{{- end -}}
+    {{- range $epindex, $ep := $endpoints -}}
+        {{- if $epindex -}},{{- end -}}
+        {{- template "template_selection.tmpl" (mergeOverwrite (deepCopy $service_data) (deepCopy $ep) (dict "general" $.general)) -}}
+    {{- end -}}
+{{- end -}}

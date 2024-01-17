@@ -1,0 +1,28 @@
+{
+  "name": "auth-basic-user-detail",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "NODE_ENV=production vite build",
+    "build:dev": "NODE_ENV=development vite build",
+    "serve": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx src",
+    "format": "prettier --write src"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-admin": "^4.16.0",
+    "@mui/material": "^5.15.3",
+    "@mui/icons-material": "^5.15.2",
+    "react-dom": "^18.2.0",
+    "react-shadow-dom-retarget-events": "^1.1.0",
+    "@dms/remote-component": "file:../@dms/remote-component",
+    "@dms/modal-context": "file:../@dms/modal-context"
+  },
+  "devDependencies": {
+    "@types/node": "^18.16.1",
+    "@types/react": "^18.0.22",
+    "@types/react-dom": "^18.0.7"
+  }
+}

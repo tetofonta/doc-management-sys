@@ -1,6 +1,6 @@
 import { NestFactory, PartialGraphHost, Reflector } from '@nestjs/core';
 import * as path from 'path';
-import { ClassSerializerInterceptor, INestApplication, ValidationPipe } from '@nestjs/common';
+import { ClassSerializerInterceptor, INestApplication, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import { getLogLevels } from './loglevel';
 import { WebConfig } from './config/WebConfig';
@@ -19,17 +19,13 @@ export async function configure_application(
 
     const generalConfigs: WebConfig = app.get(config_key);
     app.setGlobalPrefix(path.join(generalConfigs.base_path, 'api'));
-    app.useGlobalPipes(
-        new ValidationPipe({
-            transform: true,
-        })
-    );
     app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
     return [app, generalConfigs];
 }
 
 export async function start_application<T>(app: INestApplication<T>, generalConfigs: WebConfig) {
     try {
+        Logger.log(`Starting webserver at bound to ${generalConfigs.bind_address}:${generalConfigs.port}`);
         await app.listen(generalConfigs.port, generalConfigs.bind_address);
     } catch {
         fs.writeFileSync('graph.json', PartialGraphHost.toString() ?? '');

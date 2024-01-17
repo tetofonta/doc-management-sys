@@ -4,10 +4,10 @@
   "name": "DMS",
   {{template "general.tmpl" . }},
   "extra_config": {
-    "telemetry/logging": {{template "logging.tmpl" .}}
+    "telemetry/logging": {{template "logging.tmpl" .logging }}
   },
   "endpoints": [
-    {{ template "services_token.tmpl" . }},
-    {{ template "services_auth_basic.tmpl" . }}
+    {{ template "service.tmpl" (set .auth "general" .general) }},
+    {{ template "service.tmpl" (set .resources "general" .general) }}
   ]
 }

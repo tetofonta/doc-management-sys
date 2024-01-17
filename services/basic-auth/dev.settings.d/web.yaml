@@ -1,3 +1,4 @@
 port: 7101
 bind_address: 0.0.0.0
 log_requests: true
+debug_requests: true

@@ -3,3 +3,4 @@ node_modules/
 docker/dev/volumes
 lib/
 dist/
+frontend-old/

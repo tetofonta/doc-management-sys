@@ -12,7 +12,7 @@
 "sequential_start": false,
   "extra_config": {
     "telemetry/logging": {
-    "level": "INFO",
+    "level": "DEBUG",
     "prefix": "[DMS-KRAKEND]",
     "syslog": false,
     "stdout": true,
@@ -21,224 +21,402 @@
 }
   },
   "endpoints": [
+    
     {
     "endpoint": "/api/token/",
     "method": "GET",
+    "output_encoding": "no-op",
     "input_headers": ["Authorization"],
-    "backend": [{
-        "url_pattern": "/api/token/",
-        "method": "GET",
-        "host": [ "http://api-token-dev:7100" ]
-    }],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/token/",
+            "method": "GET",
+            "host": ["http://api-token-dev:7100"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","token","token:info"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","token:info"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
+}
+,
+    {
     "endpoint": "/api/token/",
     "method": "PATCH",
-    "input_headers": ["Authorization", "X-Old-Token"],
     "output_encoding": "no-op",
-    "backend": [{
-        "encoding": "no-op",
-        "url_pattern": "/api/token/",
-        "method": "PATCH",
-        "host": [ "http://api-token-dev:7100" ]
-    }],
+    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/token/",
+            "method": "PATCH",
+            "host": ["http://api-token-dev:7100"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","token","token:refresh"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","token:refresh"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
+}
+,
     {
     "endpoint": "/api/auth/basic/",
     "method": "POST",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/auth/",
-        "method": "POST",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }]
-},
-{
+    "input_headers": ["Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/auth/",
+            "method": "POST",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+    }
+}
+,
+    
+    {
     "endpoint": "/api/local-users/",
     "method": "GET",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/user/",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
     "input_headers": ["Authorization"],
-    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "input_query_strings": ["filters[]","sortAsc[]","sortDesc[]","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/user/",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:list","localuser:list:localuser","localuser:list:localuser:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localuser,","localuser:list"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
+}
+,
+    {
     "endpoint": "/api/local-users/{id}/",
     "method": "GET",
-    "backend": [{
-        "url_pattern": "/api/user/{id}/",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
+    "output_encoding": "no-op",
     "input_headers": ["Authorization"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/{id}/",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:get","localuser:get:localuser","localuser:get:localuser:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localuser,","localuser:get"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
-    "endpoint": "/api/local-users/",
-    "method": "POST",
-    "backend": [{
-        "url_pattern": "/api/user/",
-        "method": "POST",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
-    "input_headers": ["Authorization", "Content-Length", "Content-Type"],
-    "extra_config": {
-        "auth/validator": {
-    "alg": "ES384",
-    "audience": ["dms"],
-    "roles_key": "features",
-    "disable_jwk_security": true,
-    "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localuser,","localuser:admin,","localuser:admin:create"],
-    "operation_debug": true
 }
-    }
-},
-{
-    "endpoint": "/api/local-users/{id}/local-groups/",
+,
+    {
+    "endpoint": "/api/local-users/{id}/local-groups",
     "method": "GET",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/group/?filter[]=%7b%22user.id%22%3a+%22{id}%22%7d",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
     "input_headers": ["Authorization"],
-    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "input_query_strings": ["sortAsc[]","sortDesc[]","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/group/?filters[]=%7B%22users.id%22%3A%20%22{id}%22%7D",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:get","localuser:get:localuser","localuser:get:localuser:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localgroup,","localgroup:list"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
+}
+,
+    {
+    "endpoint": "/api/local-users/",
+    "method": "POST",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/",
+            "method": "POST",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:admin","localuser:admin:create"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/local-users/{id}/",
+    "method": "PUT",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/{id}/",
+            "method": "PUT",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:admin","localuser:admin:edit"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/local-users/{id}/",
+    "method": "DELETE",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/{id}/",
+            "method": "DELETE",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:admin","localuser:admin:delete"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/local-users/",
+    "method": "DELETE",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["filters[]"],
+    "backend": [
+        {
+            "url_pattern": "/api/user/",
+            "method": "DELETE",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:admin","localuser:admin:delete"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/local-users/{id}/",
+    "method": "PATCH",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/{id}/",
+            "method": "PATCH",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:admin","localuser:admin:reset"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
     "endpoint": "/api/local-groups/",
     "method": "GET",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/group/",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
     "input_headers": ["Authorization"],
-    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "input_query_strings": ["filters[]","sortAsc[]","sortDesc[]","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/group/",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:list","localuser:list:localuser","localuser:list:localuser:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localgroup,","localgroup:list"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
+}
+,
+    {
     "endpoint": "/api/local-groups/{id}/",
     "method": "GET",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/group/{id}/",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
     "input_headers": ["Authorization"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/group/{id}/",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:get","localuser:get:localuser","localuser:get:localuser:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localgroup,","localgroup:get"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
-},
-{
-    "endpoint": "/api/local-groups/{id}/local-users/",
+}
+,
+    {
+    "endpoint": "/api/local-groups/{id}/local-users",
     "method": "GET",
     "output_encoding": "no-op",
-    "backend": [{
-        "url_pattern": "/api/user/?filter[]=%7b%22groups.id%22%3a+%22{id}%22%7d",
-        "method": "GET",
-        "host": [ "http://api-basic-auth-dev:7101" ]
-    }],
     "input_headers": ["Authorization"],
-    "input_query_strings": ["offset", "take", "sortAsc[]", "sortDesc[]", "filters[]"],
+    "input_query_strings": ["sortAsc[]","sortDesc[]","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/user/?filters[]=%7B%groups.id%22%3A%20%22{id}%22%7D",
+            "method": "GET",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
     "extra_config": {
-        "auth/validator": {
+        
+            "auth/validator": {
     "alg": "ES384",
     "audience": ["dms"],
     "roles_key": "features",
-    "disable_jwk_security": true,
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localgroup","localgroup:get","localgroup:get:localgroup","localgroup:get:localgroup:admin"],
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","localuser,","localuser:list"],
+    "disable_jwk_security": true,
     "operation_debug": true
 }
+        
     }
 }
+
   ]
 }

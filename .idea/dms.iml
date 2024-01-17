@@ -7,14 +7,16 @@
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/config/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/persistence/lib" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/out" />
       <excludeFolder url="file://$MODULE_DIR$/raw" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/@dms/vite-plugin-remote-component/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/frontend/@dms/vite-plugin-remote-component/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/auth/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/crud/lib" />
       <excludeFolder url="file://$MODULE_DIR$/services/basic-auth/dist" />
       <excludeFolder url="file://$MODULE_DIR$/docker/dev/volumes" />
+      <excludeFolder url="file://$MODULE_DIR$/services/token/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend-old/@dms/vite-plugin-remote-component/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend-old/@dms/vite-plugin-remote-component/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend-old/out" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend-old" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

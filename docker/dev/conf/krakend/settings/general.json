@@ -1,4 +1,12 @@
 {
   "http_port": 8080,
-  "base_path": "/api"
+  "base_path": "/api",
+  "token": {
+    "alg": "ES384",
+    "audience": [
+      "dms"
+    ],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json"
+  }
 }

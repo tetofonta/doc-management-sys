@@ -12,4 +12,4 @@ export class Config {
     }
 }
 
-export interface Configurable{}
+export interface Configurable {}

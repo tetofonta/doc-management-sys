@@ -1,8 +1,8 @@
 {
-    "level": "INFO",
+    "level": "{{ .level }}",
     "prefix": "[DMS-KRAKEND]",
-    "syslog": false,
-    "stdout": true,
-    "format": "default",
-    "syslog_facility": "local3"
+    "syslog": {{ .syslog }},
+    "stdout": {{ .stdout }},
+    "format": "{{ .format }}",
+    "syslog_facility": "{{ .syslog_facility }}"
 }

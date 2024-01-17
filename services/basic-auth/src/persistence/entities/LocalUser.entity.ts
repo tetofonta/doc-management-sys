@@ -1,9 +1,9 @@
 import { BaseEntity } from '@dms/persistence/lib/overload/BaseEntity';
 import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { LocalGroupEntity } from './LocalGroup.entity';
-import { Exclude, Expose, Transform } from 'class-transformer';
+import { Exclude, Transform, TransformFnParams } from 'class-transformer';
 import * as argon2 from 'argon2';
-import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT, DefinedIf, ExposeIf } from '@dms/crud';
+import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT, DefinedIf, ExposeIf, OptionalIf } from '@dms/crud';
 import {
     IsArray,
     IsBoolean,
@@ -18,51 +18,60 @@ import {
 @Entity()
 @Exclude()
 export class LocalUserEntity extends BaseEntity {
+    public static readonly LIST = CRUD_LIST(LocalUserEntity);
+    public static readonly SELECT = CRUD_SELECT(LocalUserEntity);
+    public static readonly CREATE = CRUD_CREATE(LocalUserEntity);
+    public static readonly EDIT = CRUD_EDIT(LocalUserEntity);
+
     @PrimaryGeneratedColumn('uuid')
-    @ExposeIf(CRUD_SELECT(LocalUserEntity), CRUD_LIST(LocalUserEntity))
+    @ExposeIf(
+        LocalUserEntity.SELECT,
+        LocalUserEntity.LIST,
+        CRUD_CREATE('LocalGroupEntity'),
+        CRUD_EDIT('LocalGroupEntity')
+    )
     public readonly id: string;
 
     @Column({ unique: true })
-    @ExposeIf(CRUD_SELECT(LocalUserEntity), CRUD_LIST(LocalUserEntity))
-    @IsString()
-    @IsNotEmpty()
-    @DefinedIf(CRUD_CREATE(LocalUserEntity))
+    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE, LocalUserEntity.EDIT)
+    @IsString({ always: true })
+    @IsNotEmpty({ always: true })
+    @DefinedIf(LocalUserEntity.CREATE)
     public username: string;
 
-    @Exclude()
     @Column()
-    @IsStrongPassword()
-    @IsNotEmpty()
-    @DefinedIf(CRUD_CREATE(LocalUserEntity))
+    @ExposeIf(LocalUserEntity.CREATE)
+    @IsStrongPassword(undefined, { always: true })
+    @IsNotEmpty({ always: true })
+    @IsOptional({ always: true })
     public password: string;
 
     @Column({ default: false })
-    @ExposeIf(CRUD_SELECT(LocalUserEntity), CRUD_LIST(LocalUserEntity))
-    @IsBoolean()
-    @IsOptional()
+    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE, LocalUserEntity.EDIT)
+    @IsBoolean({ always: true })
+    @IsOptional({ always: true })
     public superuser: boolean;
 
     @Column({ default: true })
-    @ExposeIf(CRUD_SELECT(LocalUserEntity), CRUD_LIST(LocalUserEntity))
-    @IsBoolean()
-    @IsOptional()
+    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE, LocalUserEntity.EDIT)
+    @IsBoolean({ always: true })
+    @IsOptional({ always: true })
     public enabled: boolean;
 
     @ManyToMany(() => LocalGroupEntity, (g) => g.users)
     @JoinTable()
-    @Transform((p) => p.value?.map((e: LocalGroupEntity) => ({ id: e.id, name: e.name })))
-    @ExposeIf(CRUD_LIST(LocalUserEntity))
-    @IsArray()
-    @ValidateNested()
-    @IsOptional()
+    @ExposeIf(LocalUserEntity.LIST, LocalUserEntity.SELECT, LocalUserEntity.CREATE, LocalUserEntity.EDIT)
+    @IsArray({ always: true })
+    @ValidateNested({ each: true, groups: [LocalUserEntity.CREATE, LocalUserEntity.EDIT] })
+    @IsOptional({ always: true })
     public groups: LocalGroupEntity[];
 
     @Column({ type: 'timestamp', nullable: true })
-    @ExposeIf(CRUD_SELECT(LocalUserEntity))
+    @ExposeIf(LocalUserEntity.SELECT)
     public lastLogin?: Date;
 
     @Column({ type: 'timestamp', nullable: true })
-    @ExposeIf(CRUD_SELECT(LocalUserEntity))
+    @ExposeIf(LocalUserEntity.SELECT)
     public lastPasswordChange?: Date;
 
     @Column({ default: false })

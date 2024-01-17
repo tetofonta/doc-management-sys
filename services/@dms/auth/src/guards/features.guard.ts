@@ -13,7 +13,7 @@ export class FeatureGuard implements CanActivate {
             return true;
         }
         const r = context.switchToHttp().getRequest();
-        // return r.user.superuser || features.every((f) => r.user.features.some((e: string) => f.startsWith(e)));
-        return r.user.superuser || features.every((f) => r.user.features.includes(f));
+        return r.user.superuser || features.every((f) => r.user.features.some((e: string) => f.startsWith(e)));
+        // return r.user.superuser || features.every((f) => r.user.features.includes(f));
     }
 }

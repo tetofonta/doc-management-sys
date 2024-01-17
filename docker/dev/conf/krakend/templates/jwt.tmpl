@@ -1,10 +1,18 @@
-"auth/validator": {
-    "alg": "ES384",
-    "audience": ["dms"],
-    "roles_key": "features",
-    "disable_jwk_security": true,
+{{- $feature_list := (list "__superuser__") -}}
+{{- $cur_feature := (list ) -}}
+{{- range .features -}}
+    {{- range ( splitList ":" . ) -}}
+        {{- $cur_feature = (append $cur_feature .) -}}
+        {{- $feature_list = (append $feature_list ($cur_feature | join ":")) -}}
+    {{- end -}}
+{{- end -}}
+{
+    "alg": "{{ .alg }}",
+    "audience": {{ toJson .audience }},
+    "roles_key": "{{ .roles_key }}",
+    "jwk_url": "{{ .jwk_url }}",
+    "roles": {{ toJson (uniq $feature_list) }},
     "cache": true,
-    "jwk_url": "http://10.128.0.109:7100/api/.well-known/jwks.json",
-    "roles": {{ toJson (uniq ( prepend (splitList " " .) "__superuser__") ) }},
+    "disable_jwk_security": true,
     "operation_debug": true
 }

@@ -7,12 +7,14 @@ import { JwtAuthGuard } from '@dms/auth/lib/guards/jwt.guard';
 import { RequireFeatures } from '@dms/auth/lib/decorators/feature-require.decorator';
 import { FeatureGuard } from '@dms/auth/lib/guards/features.guard';
 import { TokenRefreshFeature } from './features/token-refresh.feature';
+import { Validate } from '@dms/http-base/lib/decorators/validate.decorator';
 
 @Controller('/token')
 export class TokenController {
     @Get('/')
     @UseGuards(JwtAuthGuard, FeatureGuard)
     @RequireFeatures(TokenInfoFeature)
+    @Validate()
     public async getTokenInfo(
         @Req() req: Request,
         @InjectFeature(TokenInfoFeature) t_info: TokenInfoFeature
@@ -23,6 +25,7 @@ export class TokenController {
     @Patch('/')
     @UseGuards(JwtAuthGuard, FeatureGuard)
     @RequireFeatures(TokenRefreshFeature)
+    @Validate()
     @HttpCode(200)
     public async refreshToken(
         @Req() req: Request,

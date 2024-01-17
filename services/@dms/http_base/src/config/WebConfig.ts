@@ -20,4 +20,9 @@ export class WebConfig {
     @IsBoolean()
     @IsNotEmpty()
     public readonly log_requests: boolean = false;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    public readonly debug_requests: boolean = false;
+
 }

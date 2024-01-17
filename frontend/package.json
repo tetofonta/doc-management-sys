@@ -1,27 +1,36 @@
 {
-  "name": "dms-frontend",
+  "name": "fontend",
   "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src",
+    "format": "prettier --write ./src"
+  },
   "dependencies": {
-    "@dms/libs": "file:./@dms",
-    "@dms/components": "file:./@dms-components",
-    "@dms/frontend": "file:./core"
+    "react": "^18.2.0",
+    "react-admin": "^4.16.6",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/node": "^18.16.1",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
-    "@vitejs/plugin-react": "^4.0.1",
+    "@typescript-eslint/parser": "^6.19.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@types/node": "^20.11.4",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-prettier": "^5.1.2",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^3.1.1",
-    "typescript": "^5.1.6",
-    "vite": "^4.3.9",
-    "vite-multiple-assets": "^1.2.9",
-    "sass": "^1.69.6",
-    "ra-data-json-server": "^4.16.3"
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.2.2",
+    "typescript": "^5.3.3",
+    "vite": "^5.0.11",
+    "sass": "^1.69.7",
+    "ra-data-json-server": "^4.16.6"
   }
 }

@@ -3,10 +3,13 @@ import { AuthorizerService } from './authorizer.service';
 import { AuthConfig } from './config/AuthConfig';
 import { JwtModule } from '@nestjs/jwt';
 import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
-import { DMS_AUTH_CONFIG_INJECT_KEY, DMS_AUTH_FEATURES_INJECT_KEY } from './constants';
+import {
+    DMS_AUTH_CONFIG_INJECT_KEY,
+    DMS_AUTH_FEATURES_INJECT_KEY,
+    DMS_FEATURE_DETAILS_METADATA_KEY,
+} from './constants';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
-import { get_feature_module } from './decorators/feature.decorator';
 import { AuthService } from './auth.service';
 import * as crypto from 'crypto';
 
@@ -18,7 +21,9 @@ export type AuthModuleForAuthorizerAsync = {
 
 export class AuthModule {
     static forFeatures(...features: Type[]): DynamicModule {
-        const feature_metadata = features.map((e) => get_feature_module(e)).filter((e) => !!e.module);
+        const feature_metadata = features
+            .map((e) => Reflect.getMetadata(DMS_FEATURE_DETAILS_METADATA_KEY, e))
+            .filter((e) => !!e.module);
         const modules = feature_metadata.map((e) => e.module);
         const all_features_names = feature_metadata.map((e) => e.name);
         const all_features = {

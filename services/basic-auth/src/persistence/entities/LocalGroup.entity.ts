@@ -1,46 +1,61 @@
 import { BaseEntity } from '@dms/persistence/lib/overload/BaseEntity';
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { LocalUserEntity } from './LocalUser.entity';
-import { Exclude, Expose } from 'class-transformer';
-import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT } from '@dms/crud';
-import { IsDefined, IsUUID } from 'class-validator';
+import { Exclude, Transform, TransformFnParams } from 'class-transformer';
+import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT, DefinedIf, ExposeIf } from '@dms/crud';
+import { IsArray, IsDefined, IsNotEmpty, IsString, IsUUID, ValidateNested } from 'class-validator';
 
 @Entity()
 @Exclude()
 export class LocalGroupEntity extends BaseEntity {
+    public static readonly LIST = CRUD_LIST(LocalGroupEntity);
+    public static readonly SELECT = CRUD_SELECT(LocalGroupEntity);
+    public static readonly CREATE = CRUD_CREATE(LocalGroupEntity);
+    public static readonly EDIT = CRUD_EDIT(LocalGroupEntity);
+
     @PrimaryGeneratedColumn('uuid')
-    @Expose({
-        groups: [
-            CRUD_SELECT(LocalGroupEntity),
-            CRUD_LIST(LocalGroupEntity),
-            CRUD_LIST(LocalUserEntity),
-            CRUD_SELECT(LocalUserEntity),
-        ],
-    })
-    @IsUUID()
-    @IsDefined({ groups: [CRUD_CREATE(LocalUserEntity), CRUD_EDIT(LocalUserEntity)] })
+    @ExposeIf(
+        LocalGroupEntity.SELECT,
+        LocalGroupEntity.LIST,
+        LocalUserEntity.LIST,
+        LocalUserEntity.EDIT,
+        LocalUserEntity.CREATE,
+        LocalUserEntity.SELECT
+    )
+    @IsUUID(4, { always: true })
+    @DefinedIf(LocalUserEntity.EDIT, LocalUserEntity.CREATE)
     public readonly id: string;
 
     @Column({ unique: true })
-    @Expose({
-        groups: [
-            CRUD_SELECT(LocalGroupEntity),
-            CRUD_LIST(LocalGroupEntity),
-            CRUD_LIST(LocalUserEntity),
-            CRUD_SELECT(LocalUserEntity),
-        ],
-    })
+    @ExposeIf(
+        LocalGroupEntity.SELECT,
+        LocalGroupEntity.LIST,
+        LocalGroupEntity.CREATE,
+        LocalGroupEntity.EDIT,
+        LocalUserEntity.LIST,
+        LocalUserEntity.SELECT
+    )
+    @IsDefined({ always: true })
+    @IsNotEmpty({ always: true })
+    @DefinedIf(LocalGroupEntity.CREATE)
     public name: string;
 
     @Column({ array: true, type: 'text' })
-    @Expose({ groups: [CRUD_SELECT(LocalGroupEntity)] })
+    @ExposeIf(LocalGroupEntity.SELECT, LocalGroupEntity.CREATE, LocalGroupEntity.EDIT)
+    @IsString({ each: true, always: true })
+    @IsArray({ always: true })
     public associated_features: string[];
 
     @ManyToMany(() => LocalUserEntity, (u) => u.groups)
-    @Expose({ groups: [CRUD_SELECT(LocalGroupEntity)] })
+    @ExposeIf(LocalGroupEntity.CREATE, LocalGroupEntity.EDIT)
+    @Transform(({ value }: TransformFnParams) => ({ id: value }), {
+        groups: [LocalGroupEntity.CREATE, LocalGroupEntity.EDIT],
+    })
+    @IsArray({ always: true })
+    @ValidateNested({ each: true, always: true })
     public users: LocalUserEntity[];
 
-    @Expose({ groups: [CRUD_SELECT(LocalGroupEntity), CRUD_LIST(LocalGroupEntity)] })
+    @ExposeIf(LocalGroupEntity.LIST)
     public get userCount(): number {
         return this.users.length;
     }

@@ -1,0 +1,27 @@
+{
+  "services": [
+    {
+      "backends": [ "http://api-basic-auth-dev:7101" ],
+      "base_path": "/local-users",
+      "endpoints": [
+        { "template_name": "endpoint", "path": "/", "to": "/api/user/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["filters[]", "sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localuser:list", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/user/{id}/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:get", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/{id}/local-groups", "to": "/api/group/?filters[]=%7B%22users.id%22%3A%20%22{id}%22%7D", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localuser:get", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/", "to": "/api/user/", "method": "POST", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:admin:create"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/user/{id}/", "method": "PUT", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:admin:edit"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/user/{id}/", "method": "DELETE", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:admin:delete"] },
+        { "template_name": "endpoint", "path": "/", "to": "/api/user/", "method": "DELETE", "inputs": { "headers": ["Authorization"], "queries": ["filters[]"] }, "auth": true, "features": ["localuser:admin:delete"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/user/{id}/", "method": "PATCH", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:admin:reset"] }
+      ]
+    },
+    {
+      "backends": [ "http://api-basic-auth-dev:7101" ],
+      "base_path": "/local-groups",
+      "endpoints": [
+        { "template_name": "endpoint", "path": "/", "to": "/api/group/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["filters[]", "sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localuser:list", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/group/{id}/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:get", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/{id}/local-users", "to": "/api/user/?filters[]=%7B%groups.id%22%3A%20%22{id}%22%7D", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localgroup:get", "localgroup:admin"] }
+      ]
+    }
+  ]
+}

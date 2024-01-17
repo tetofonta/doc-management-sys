@@ -1,0 +1,25 @@
+{{- $additional_headers := (list ) -}}
+{{- if (ne .method "GET") -}}
+    {{- if (ne .method "DELETE") -}}
+        {{- $additional_headers = (list "Content-Type" "Content-Length") -}}
+    {{- end -}}
+{{- end -}}
+{
+    "endpoint": "{{ .general.base_path }}{{ .base_path }}{{ .path }}",
+    "method": "{{ .method }}",
+    "output_encoding": "no-op",
+    "input_headers": {{ toJson (concat .inputs.headers $additional_headers) }},
+    "input_query_strings": {{ toJson .inputs.queries }},
+    "backend": [
+        {
+            "url_pattern": {{ toJson .to }},
+            "method": "{{ .method }}",
+            "host": {{ toJson .backends }}
+        }
+    ],
+    "extra_config": {
+        {{ if .auth }}
+            "auth/validator": {{ template "jwt.tmpl" ( set .general.token "features" .features) }}
+        {{ end }}
+    }
+}
