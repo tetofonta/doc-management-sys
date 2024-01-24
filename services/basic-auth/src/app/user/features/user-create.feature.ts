@@ -30,6 +30,8 @@ export class LocalUserCreateFeature extends CreateFeature<LocalUserEntity> {
             });
         }
 
+        console.log(body)
+
         return body;
     }
 }

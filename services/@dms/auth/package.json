@@ -7,8 +7,7 @@
   "license": "UNLICENSED",
   "main": "lib/lib.js",
   "scripts": {
-    "proto": "[ ! -d ./src/proto_types ] && mkdir ./src/proto_types || rm -r ./src/proto_types/*; protoc --plugin=$(which protoc-gen-ts_proto) --ts_proto_out=./src/proto_types --proto_path ../../../types ../../../types/**/*;",
-    "build": "npm run proto; tsc"
+    "build": "tsc"
   },
   "dependencies": {
     "@nestjs/jwt": "^10.2.0",

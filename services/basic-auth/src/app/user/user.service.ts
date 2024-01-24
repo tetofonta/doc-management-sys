@@ -35,12 +35,12 @@ export class UserService {
             }
         }
 
-        const user = await this.userRepository.findOneBy({ username: this.config.passwords.adminUserName });
+        const user = await this.userRepository.findOneBy({ id: this.config.passwords.adminUserName });
         if (!user) {
             const password = Math.random().toString(26).substring(2);
             await this.userRepository
                 .create({
-                    username: this.config.passwords.adminUserName,
+                    id: this.config.passwords.adminUserName,
                     password,
                     enabled: true,
                     superuser: true,
@@ -51,4 +51,4 @@ export class UserService {
             this.logger.log(`Created user ${this.config.passwords.adminUserName} with password ${password}`);
         }
     }
-} // admin:lk8gdfb6cjg
+} // admin:834eo70jl42e

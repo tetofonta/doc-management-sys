@@ -7,9 +7,9 @@ import { AuthModule } from '@dms/auth/lib/auth.module';
 import { AuthConfig } from '@dms/auth/lib/config/AuthConfig';
 import { TokenModule } from './token/token.module';
 import { WellKnownController } from './well-known.controller';
-import { DevtoolsModule } from '@nestjs/devtools-integration';
 import { WebModule } from '@dms/http-base';
 import { AppWebConfig } from '../config/WebConfig';
+import { TokenPayload } from '../proto_types/token/auth-token';
 
 @Module({
     imports: [

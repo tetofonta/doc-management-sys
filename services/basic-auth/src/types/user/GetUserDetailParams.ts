@@ -1,8 +1,8 @@
-import { IsDefined, IsNotEmpty, IsUUID } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class GetUserDetailParams {
-    @IsUUID()
+    @IsString()
     @Type(() => String)
     @IsDefined()
     @IsNotEmpty()

@@ -4,6 +4,7 @@ import { Response, Request } from 'express';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LocalUserEntity } from '../../persistence/entities/LocalUser.entity';
 import { Repository } from 'typeorm';
+import { TokenPayload } from '../../proto_types/token/auth-token';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
     ) {}
 
     public async authenticate(username: string, password: string, res: Response, req: Request) {
-        const user = await this.userRepository.findOne({ where: { username }, relations: { groups: true } });
+        const user = await this.userRepository.findOne({ where: { id: username }, relations: { groups: true } });
         if (!user) throw new NotFoundException(`User ${username} does not exist in the local user database`);
         if (!user.enabled) throw new ForbiddenException(`User ${username} is not enabled`);
         if (!(await user.verify(password))) throw new ForbiddenException('Wrong password');
@@ -24,21 +25,33 @@ export class AuthService {
         user.lastLogin = new Date();
         await user.save();
 
-        const raw_features: string[] = user.groups.map((e) => e.associated_features).flat();
-        const features = new Set(raw_features);
-        // const features = raw_features.map((f) => {
-        //     return raw_features
-        //         .filter((e) => e.startsWith(f) || f.startsWith(e))
-        //         .sort((a, b) => a.length - b.length)[0];
-        // });
-
-        return await this.auth.issueToken(
-            user.id,
-            user.username,
-            user.superuser,
-            [...features],
-            user.groups.map((e) => e.name),
-            res
+        const raw_features = [...new Set(user.groups.map((e) => e.associated_features).flat())].sort(
+            (a, b) => a.length - b.length
         );
+
+        const features = [];
+        raw_features.forEach((e) => {
+            if (!features.some((f) => e.startsWith(f))) features.push(e);
+        });
+
+        if (user.superuser) features.push('__superuser__');
+
+        const payload: TokenPayload = {
+            user_id: user.id,
+            superuser: user.superuser,
+            features: [...features],
+            groups: user.groups.map((e) => e.name),
+            source: 'basic',
+        };
+
+        const refresh_payload: TokenPayload = {
+            user_id: user.id,
+            superuser: false,
+            features: ['token:refresh', 'token:info'],
+            groups: [],
+            source: 'basic',
+        };
+
+        return await this.auth.issueToken(payload, refresh_payload, res);
     }
 }

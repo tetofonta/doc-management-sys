@@ -4,7 +4,7 @@ import { MessageBox, MessageDialogType } from "../../MessageBox/MessageBox";
 import { FeatureSet } from "../../../providers/auth/Feature";
 import React from "react";
 
-export type AuthenticatedResourceType = ResourceProps & {
+export type AuthenticatedResourceProps = ResourceProps & {
     requiredFeatures?: FeatureSet<string>[];
     requiredListFeatures?: FeatureSet<string>[];
     requiredShowFeatures?: FeatureSet<string>[];
@@ -13,7 +13,7 @@ export type AuthenticatedResourceType = ResourceProps & {
     requiredCreateFeatures?: FeatureSet<string>[];
     resourceComponent?: React.FunctionComponent<ResourceProps>;
 };
-const AuthenticatedResource = function (props: AuthenticatedResourceType) {
+const AuthenticatedResource = function (props: AuthenticatedResourceProps) {
     const {
         requiredFeatures,
         requiredListFeatures,
@@ -48,7 +48,7 @@ const AuthenticatedResource = function (props: AuthenticatedResourceType) {
 };
 
 AuthenticatedResource.raName = "Resource";
-AuthenticatedResource.registerResource = (props: AuthenticatedResourceType) => {
+AuthenticatedResource.registerResource = (props: AuthenticatedResourceProps) => {
     const listAccess = ApplicationAuthProvider.getInstance().hasPermissions(...(props.requiredListFeatures || []));
     const showAccess = ApplicationAuthProvider.getInstance().hasPermissions(...(props.requiredShowFeatures || []));
     const editAccess = ApplicationAuthProvider.getInstance().hasPermissions(...(props.requiredEditFeatures || []));

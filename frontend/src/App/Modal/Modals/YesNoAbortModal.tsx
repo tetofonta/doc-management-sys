@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { CbProps, DisplayModalProps, ModalProps } from "../modalContext";
+import React from "react";
 
 export enum YesNoAbortResult {
     YES,
@@ -14,7 +15,7 @@ export interface YesNoAbortCbProps extends CbProps {
 
 export interface YesNoAbortDisplayModalProps extends DisplayModalProps<YesNoAbortCbProps> {
     kind: "yesnoabort";
-    display_message: string;
+    display_message: React.ReactElement | string;
     title?: string;
 }
 

@@ -1,14 +1,19 @@
 import { BadRequestException, Inject, Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { AuthConfig } from '../config/AuthConfig';
-import { DMS_AUTH_CONFIG_INJECT_KEY } from '../constants';
+import {
+    DMS_AUTH_CONFIG_INJECT_KEY,
+    DMS_AUTH_DECODE_TOKEN_FUNCTION,
+} from '../constants';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { Request } from 'express';
-import { TokenPayload } from '../proto_types/token/auth-token';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor(@Inject(DMS_AUTH_CONFIG_INJECT_KEY) private readonly configs: AuthConfig) {
+    constructor(
+        @Inject(DMS_AUTH_CONFIG_INJECT_KEY) private readonly configs: AuthConfig,
+        @Inject(DMS_AUTH_DECODE_TOKEN_FUNCTION) private readonly decode: (token: any) => any
+    ) {
         super({
             jwtFromRequest: ExtractJwt.fromExtractors([
                 (req: Request) => {
@@ -27,9 +32,8 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
         });
     }
 
-    async validate(payload: TokenPayload & { exp: number }): Promise<TokenPayload> {
-        if (!payload.userId) throw new BadRequestException('Token does not have use id field');
-        if (!payload.features) throw new BadRequestException('Token does not have features');
-        return payload;
+    async validate(payload: any): Promise<any> {
+        const pay = this.decode(payload);
+        return pay;
     }
 }

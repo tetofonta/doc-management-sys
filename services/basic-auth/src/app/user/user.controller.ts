@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Param, Patch, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Put, Query, Res, UseGuards } from '@nestjs/common';
 import { InjectFeature } from '@dms/auth/lib/decorators/feature-inject.decorator';
 import { LocalUserListFeature } from './features/user-list.feature';
 import { JwtAuthGuard } from '@dms/auth/lib/guards/jwt.guard';
@@ -14,6 +14,10 @@ import { LocalUserEditFeature } from './features/user-edit.feature';
 import { LocalUserDeleteFeature } from './features/user-delete.feature';
 import { LocalUserResetFeature } from './features/user-reset-password.feature';
 import { Validate } from '@dms/http-base/lib/decorators/validate.decorator';
+import { LocalUserChangeFeature } from './features/user-change-password.feature';
+import { UserChangePasswordBody } from '../../types/user/UserChangePassword';
+import { TokenData } from '@dms/auth/lib/decorators/token-data.decorator';
+import { TokenPayload } from '../../proto_types/token/auth-token';
 
 @Controller('/user')
 export class UserController {
@@ -98,5 +102,20 @@ export class UserController {
         @InjectFeature(LocalUserResetFeature) rst: LocalUserResetFeature
     ) {
         return await rst.resetPassword(param.id);
+    }
+
+    @Patch('/')
+    @UseGuards(JwtAuthGuard, FeatureGuard)
+    @RequireFeatures(LocalUserChangeFeature)
+    @Validate()
+    public async change(
+        @Body() body: UserChangePasswordBody,
+        @TokenData() token: TokenPayload,
+        @InjectFeature(LocalUserChangeFeature) change: LocalUserChangeFeature
+    ) {
+
+        console.log(token, body)
+
+        return await change.change_password(token.user_id, body);
     }
 }

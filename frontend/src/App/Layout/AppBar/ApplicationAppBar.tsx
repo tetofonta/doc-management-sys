@@ -12,7 +12,7 @@ const ApplicationAppBar = () => {
                 </UserMenu>
             }
         >
-            <TitlePortal style={{ fontWeight: "bold" }} />
+            <TitlePortal style={{ fontWeight: "bold" }}>DMS - </TitlePortal>
             <div>{/*TODO ADD COMPONENTS IN THE CENTER OR NEAR THE TITLE*/}</div>
         </AppBar>
     );

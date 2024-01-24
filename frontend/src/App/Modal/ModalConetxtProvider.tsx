@@ -19,8 +19,9 @@ export const ModalContextProvider = (props: { children: React.ReactElement | Rea
 
     const display = useCallback(
         (props: DisplayModalProps<CbProps>) => {
-            if (!modals || modals[props.kind]) {
+            if (!modals || !modals[props.kind]) {
                 console.error("No modal fount with the kind set to", props.kind);
+                return;
             }
 
             setCb((_old: undefined | ((args: CbProps) => void)) => props.cb);

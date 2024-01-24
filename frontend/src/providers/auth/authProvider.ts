@@ -1,17 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AuthProvider, HttpError, UserIdentity } from "react-admin";
 import { Feature, FeatureSet } from "./Feature";
+import { TokenPayload } from "../../proto_types/token/auth-token";
 
-export type MinimalTokenPayloadType = {
-    features: string[];
-    superuser: boolean;
-    userId: string;
-    userName?: string;
-};
 export type LocallyStoredTokenData = {
     token: string;
     refresh_token: string;
-    payload: MinimalTokenPayloadType;
+    payload: TokenPayload;
 };
 
 export class ApplicationAuthProvider implements AuthProvider {
@@ -41,8 +36,8 @@ export class ApplicationAuthProvider implements AuthProvider {
     public async fetchJson<T = any>(
         input: string | URL | Request,
         init?: RequestInit & {
-            retryDisallowed: boolean;
-            refreshDisallowed: boolean;
+            retryDisallowed?: boolean;
+            refreshDisallowed?: boolean;
         },
     ): Promise<{ status: number; headers: Headers; body: string; json: T | null }> {
         const hdr = { Authorization: `Bearer ${this.current_token}`, ...((init || {})?.headers || {}) };
@@ -65,7 +60,12 @@ export class ApplicationAuthProvider implements AuthProvider {
                 console.log("Trying to refresh the token");
                 if (await this.refreshToken()) {
                     console.debug("Retrying fetching the resource...");
-                    if (!init?.retryDisallowed) return await this.fetchJson(input, {...init, retryDisallowed: true, refreshDisallowed: true});
+                    if (!init?.retryDisallowed)
+                        return await this.fetchJson(input, {
+                            ...init,
+                            retryDisallowed: true,
+                            refreshDisallowed: true,
+                        });
                 }
             }
         }
@@ -118,7 +118,6 @@ export class ApplicationAuthProvider implements AuthProvider {
         const payload = this.parseJwt(token);
 
         if (!payload.features) return Promise.reject();
-        if (!payload.superuser) return Promise.reject();
 
         localStorage.setItem(
             ApplicationAuthProvider.LOCAL_STORAGE_AUTH_KEY,
@@ -133,9 +132,10 @@ export class ApplicationAuthProvider implements AuthProvider {
         localStorage.setItem(
             ApplicationAuthProvider.LOCAL_STORAGE_ID_KEY,
             JSON.stringify({
-                id: payload.userId || "-",
-                fullName: payload.userName || "-",
-                avatar: (payload.userName || "-")[0],
+                ...payload,
+                id: payload.user_id || "-",
+                fullName: payload.user_id || "-",
+                avatar: (payload.user_id || "-")[0],
             }),
         );
         this.current_token = token;
@@ -165,10 +165,10 @@ export class ApplicationAuthProvider implements AuthProvider {
         return JSON.parse(id) as UserIdentity;
     }
 
-    public getIdentitySync(): UserIdentity | undefined {
+    public getIdentitySync(): (UserIdentity & TokenPayload) | undefined {
         const id = localStorage.getItem(ApplicationAuthProvider.LOCAL_STORAGE_ID_KEY);
         if (!id) return undefined;
-        return JSON.parse(id) as UserIdentity;
+        return JSON.parse(id) as UserIdentity & TokenPayload;
     }
 
     private getAuthData(): { status: false; data: undefined } | { status: true; data: LocallyStoredTokenData } {
@@ -176,7 +176,6 @@ export class ApplicationAuthProvider implements AuthProvider {
         if (!auth) return { status: false, data: undefined };
         try {
             const data = JSON.parse(auth) as LocallyStoredTokenData;
-            if (!data.payload?.superuser) return { status: false, data: undefined };
             if (!data.payload?.features) return { status: false, data: undefined };
             if (!data.token) return { status: false, data: undefined };
             if (!data.refresh_token) return { status: false, data: undefined };
@@ -227,6 +226,6 @@ export class ApplicationAuthProvider implements AuthProvider {
                 })
                 .join(""),
         );
-        return JSON.parse(jsonPayload) as MinimalTokenPayloadType;
+        return JSON.parse(jsonPayload) as TokenPayload;
     }
 }

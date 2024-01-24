@@ -12,7 +12,7 @@ export class HTTPLoggerMiddleware implements NestMiddleware {
     use(request: Request, response: Response, next: NextFunction): void {
         if (!this.config.log_requests) return;
 
-        const { ip, method, url, headers, body } = request;
+        const { ip, method, originalUrl: url, headers, body } = request;
         const userAgent = request.get('user-agent') || '<no user-agent>';
         const req_id = this.request_id;
         const time = Date.now();

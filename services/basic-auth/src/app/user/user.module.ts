@@ -13,6 +13,7 @@ import { LocalUserCreateFeature } from './features/user-create.feature';
 import { LocalUserEditFeature } from './features/user-edit.feature';
 import { LocalUserDeleteFeature } from './features/user-delete.feature';
 import { LocalUserResetFeature } from './features/user-reset-password.feature';
+import { LocalUserChangeFeature } from './features/user-change-password.feature';
 
 @Module({
     imports: [
@@ -24,7 +25,8 @@ import { LocalUserResetFeature } from './features/user-reset-password.feature';
             LocalUserCreateFeature,
             LocalUserEditFeature,
             LocalUserDeleteFeature,
-            LocalUserResetFeature
+            LocalUserResetFeature,
+            LocalUserChangeFeature,
         ),
     ],
     controllers: [UserController],

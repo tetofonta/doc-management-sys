@@ -2,9 +2,6 @@ import { Feature } from '@dms/auth/lib/decorators/feature.decorator';
 import { LocalUserEntity } from '../../../persistence/entities/LocalUser.entity';
 import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateFeature, EditFeature } from '@dms/crud';
-import { LocalGroupEntity } from '../../../persistence/entities/LocalGroup.entity';
-import { DeepPartial } from '@dms/auth/lib/proto_types/token/auth-token';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 
 @Feature('localuser:admin:reset', {
@@ -22,7 +19,7 @@ export class LocalUserResetFeature {
         user.password = new_password;
         user.forceChange = true;
         user.lastPasswordChange = new Date();
-        // await user.save();
+        await user.save();
         return { psw: new_password };
     }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useAuthProvider, useLogin } from "react-admin";
 import { ApplicationAuthProvider } from "../../providers/auth/authProvider";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";
@@ -8,6 +8,7 @@ import { AuthMethodConfigType, AuthMethodsConfigType } from "./LoginPage";
 
 import "./css/common.sass";
 import "./css/LoginMethodList.sass";
+import { useApplicationAuthProvider } from "../../providers/auth/context";
 
 const LoginMethodList = (props: { conf: AuthMethodsConfigType }) => {
     const requested_plugin_string = window.location.hash.split("#").at(-1);
@@ -16,7 +17,7 @@ const LoginMethodList = (props: { conf: AuthMethodsConfigType }) => {
         props.conf[requested_plugin_string || "login"],
     );
     const login = useLogin();
-    const authProvider = useAuthProvider() as ApplicationAuthProvider;
+    const authProvider = useApplicationAuthProvider();
 
     return (
         <>
@@ -50,7 +51,14 @@ const LoginMethodList = (props: { conf: AuthMethodsConfigType }) => {
 
                     <Slide direction="left" in={!!selectedLogin} mountOnEnter unmountOnExit>
                         <Box className="loginInteractionBox">
-                            {selectedLogin && false}
+                            {selectedLogin && (
+                                <Suspense fallback={<CircularProgress />}>
+                                    {React.createElement(selectedLogin.component, {
+                                        login,
+                                        previousIdentity: authProvider.getPreviousIdentity(),
+                                    })}
+                                </Suspense>
+                            )}
                             <Button
                                 className="footerButton"
                                 fullWidth

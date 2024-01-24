@@ -5,6 +5,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { ForwardReference } from '@nestjs/common/interfaces/modules/forward-reference.interface';
 import {
     DMS_AUTH_CONFIG_INJECT_KEY,
+    DMS_AUTH_DECODE_TOKEN_FUNCTION,
+    DMS_AUTH_DECODED_TOKEN_TO_FEATURES,
     DMS_AUTH_FEATURES_INJECT_KEY,
     DMS_FEATURE_DETAILS_METADATA_KEY,
 } from './constants';
@@ -48,13 +50,23 @@ export class AuthModule {
         };
     }
 
-    static forRoot(data: AuthConfig): DynamicModule {
+    static forRoot(
+        data: AuthConfig,
+        decode_token: (token: any) => any = (token) => token,
+        token_to_features: (decoded_token: any) => {
+            superuser: boolean;
+            features: string[];
+        } = (decoded_token) => decoded_token
+    ): DynamicModule {
         data.jwt.signOptions.keyid = crypto.createHash('sha384').update(data.jwt.publicKey).digest('base64');
-
+        const functions = [
+            { provide: DMS_AUTH_DECODE_TOKEN_FUNCTION, useValue: decode_token },
+            { provide: DMS_AUTH_DECODED_TOKEN_TO_FEATURES, useValue: token_to_features },
+        ];
         return {
             module: AuthModule,
             global: true,
-            providers: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, JwtStrategy, AuthService],
+            providers: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, JwtStrategy, AuthService, ...functions],
             imports: [
                 JwtModule.register({
                     global: true,
@@ -62,22 +74,37 @@ export class AuthModule {
                 }),
                 PassportModule,
             ],
-            exports: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, AuthService],
+            exports: [{ provide: DMS_AUTH_CONFIG_INJECT_KEY, useValue: data }, AuthService, ...functions],
         };
     }
 
-    static forRootAsync(data: AuthModuleForAuthorizerAsync): DynamicModule {
+    static forRootAsync(
+        data: AuthModuleForAuthorizerAsync,
+        decode_token: (token: any) => any = (token) => token,
+        token_to_features: (decoded_token: any) => {
+            superuser: boolean;
+            features: string[];
+        } = (decoded_token) => decoded_token
+    ): DynamicModule {
         const config_provider = {
             provide: DMS_AUTH_CONFIG_INJECT_KEY,
             inject: data.inject,
             useFactory: async (...args: any[]) => await data.useFactory(...args),
         };
 
+        const functions = [
+            { provide: DMS_AUTH_DECODE_TOKEN_FUNCTION, useValue: decode_token },
+            {
+                provide: DMS_AUTH_DECODED_TOKEN_TO_FEATURES,
+                useValue: token_to_features,
+            },
+        ];
+
         return {
             module: AuthModule,
             global: true,
-            providers: [config_provider, JwtStrategy, AuthService],
-            exports: [config_provider, AuthService],
+            providers: [...functions, config_provider, JwtStrategy, AuthService],
+            exports: [config_provider, AuthService, ...functions],
             imports: [
                 ...data.imports,
                 JwtModule.registerAsync({

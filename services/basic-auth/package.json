@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "proto": "buf generate ../../types --path ../../types/token",
     "build": "nest build",
     "start": "nest start",
     "start:dev": "nest start --watch -e \"node --inspect='0.0.0.0:9201'\"",
@@ -24,7 +25,8 @@
     "@dms/auth": "file:../@dms/auth",
     "@dms/crud": "file:../@dms/crud",
     "@dms/http-base": "file:../@dms/http_base",
-    "argon2": "^0.31.2"
+    "argon2": "^0.31.2",
+    "protobufjs": "^7.2.6"
   },
   "devDependencies": {
     "@nestjs/testing": "^10.0.0",
@@ -35,7 +37,9 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1"
+    "ts-node": "^10.9.1",
+    "@bufbuild/buf": "^1.28.1",
+    "ts-proto": "^1.166.0"
   },
   "jest": {
     "moduleFileExtensions": [

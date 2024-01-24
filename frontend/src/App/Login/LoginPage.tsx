@@ -3,14 +3,19 @@ import "./css/LoginPage.sass";
 import { Box, CssBaseline, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import { MessageBox, MessageDialogType } from "../MessageBox/MessageBox";
-import { Loading } from "react-admin";
+import { Loading, UserIdentity } from "react-admin";
 import LoginMethodList from "./LoginMethodList";
 import { useLoginMethods } from "../../Plugins/login";
+
+export type AuthComponentProps = {
+    login: (x: { token: string; refresh_token: string }) => void;
+    previousIdentity?: UserIdentity;
+};
 
 export type AuthMethodConfigType = {
     title: string;
     description?: string;
-    component: React.FunctionComponent | React.ExoticComponent;
+    component: React.FunctionComponent<AuthComponentProps> | React.ExoticComponent<AuthComponentProps>;
 };
 
 export type AuthMethodsConfigType = {

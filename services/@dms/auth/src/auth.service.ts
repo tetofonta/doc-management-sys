@@ -1,4 +1,4 @@
-import { Inject, Injectable, UnprocessableEntityException } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { DMS_AUTH_CONFIG_INJECT_KEY } from './constants';
 import { AuthConfig } from './config/AuthConfig';
 import * as crypto from 'crypto';

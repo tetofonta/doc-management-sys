@@ -3,7 +3,5 @@ message TokenPayload{
   required bool superuser = 2;
   repeated string features = 3;
   repeated string groups = 4;
-  required string user_name = 5;
-
-  optional string sibling_hash = 100;
+  required string source = 5;
 }

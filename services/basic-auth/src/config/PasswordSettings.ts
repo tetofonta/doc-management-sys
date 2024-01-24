@@ -36,7 +36,7 @@ export class PasswordSettings {
 
     @IsDefined()
     @IsString()
-    userGroupName: string = 'user';
+    userGroupName: string = 'local_user';
 
     @IsDefined()
     @IsString()
@@ -44,5 +44,5 @@ export class PasswordSettings {
 
     @IsDefined()
     @IsString({ each: true })
-    defaultGroupFeatures: string[] = ['auth:self', 'token:info'];
+    defaultGroupFeatures: string[] = ['token:info', 'localuser:change_password'];
 }

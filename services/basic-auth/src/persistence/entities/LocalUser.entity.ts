@@ -1,13 +1,12 @@
 import { BaseEntity } from '@dms/persistence/lib/overload/BaseEntity';
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryColumn } from 'typeorm';
 import { LocalGroupEntity } from './LocalGroup.entity';
-import { Exclude, Transform, TransformFnParams } from 'class-transformer';
+import { Exclude } from 'class-transformer';
 import * as argon2 from 'argon2';
-import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT, DefinedIf, ExposeIf, OptionalIf } from '@dms/crud';
+import { CRUD_CREATE, CRUD_EDIT, CRUD_LIST, CRUD_SELECT, DefinedIf, ExposeIf } from '@dms/crud';
 import {
     IsArray,
     IsBoolean,
-    IsDefined,
     IsNotEmpty,
     IsOptional,
     IsString,
@@ -23,27 +22,18 @@ export class LocalUserEntity extends BaseEntity {
     public static readonly CREATE = CRUD_CREATE(LocalUserEntity);
     public static readonly EDIT = CRUD_EDIT(LocalUserEntity);
 
-    @PrimaryGeneratedColumn('uuid')
-    @ExposeIf(
-        LocalUserEntity.SELECT,
-        LocalUserEntity.LIST,
-        CRUD_CREATE('LocalGroupEntity'),
-        CRUD_EDIT('LocalGroupEntity')
-    )
-    public readonly id: string;
-
-    @Column({ unique: true })
-    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE, LocalUserEntity.EDIT)
+    @PrimaryColumn()
+    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE)
     @IsString({ always: true })
     @IsNotEmpty({ always: true })
     @DefinedIf(LocalUserEntity.CREATE)
-    public username: string;
+    public id: string;
 
     @Column()
     @ExposeIf(LocalUserEntity.CREATE)
     @IsStrongPassword(undefined, { always: true })
     @IsNotEmpty({ always: true })
-    @IsOptional({ always: true })
+    @DefinedIf(LocalUserEntity.CREATE)
     public password: string;
 
     @Column({ default: false })

@@ -3,7 +3,7 @@ import { Menu, MenuProps } from "react-admin";
 import * as Icons from "@mui/icons-material";
 import { useApplicationCustomRoutes } from "../../../Plugins/routes";
 import React from "react";
-import { getIcon } from '../../utils';
+import { getIcon } from "../../utils";
 
 export interface CustomRouteSidebarDescriptor {
     label: string;

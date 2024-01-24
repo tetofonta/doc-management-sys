@@ -55,7 +55,7 @@
     "endpoint": "/api/token/",
     "method": "PATCH",
     "output_encoding": "no-op",
-    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_headers": ["Authorization","X-Old-Token","Content-Type","Content-Length"],
     "input_query_strings": [],
     "backend": [
         {
@@ -65,17 +65,6 @@
         }
     ],
     "extra_config": {
-        
-            "auth/validator": {
-    "alg": "ES384",
-    "audience": ["dms"],
-    "roles_key": "features",
-    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
-    "roles": ["__superuser__","token","token:refresh"],
-    "cache": true,
-    "disable_jwk_security": true,
-    "operation_debug": true
-}
         
     }
 }
@@ -94,6 +83,35 @@
         }
     ],
     "extra_config": {
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/auth/basic/",
+    "method": "PATCH",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization","Content-Type","Content-Length"],
+    "input_query_strings": [],
+    "backend": [
+        {
+            "url_pattern": "/api/user/",
+            "method": "PATCH",
+            "host": ["http://api-basic-auth-dev:7101"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","localuser","localuser:change_password"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
         
     }
 }

@@ -22,16 +22,6 @@ services:
     volumes:
       - ./conf/krakend:/etc/krakend
 
-  static-serve:
-    image: python:3.11-slim
-    restart: 'no'
-    command: ["python", "-m", "http.server"]
-    working_dir: /out
-    ports:
-      - 8000:8000
-    volumes:
-      - ../../frontend/out:/out
-
   api-token-dev:
     image: node:20.5-alpine
     restart: 'no'
