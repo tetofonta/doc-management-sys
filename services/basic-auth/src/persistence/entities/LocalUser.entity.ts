@@ -23,7 +23,7 @@ export class LocalUserEntity extends BaseEntity {
     public static readonly EDIT = CRUD_EDIT(LocalUserEntity);
 
     @PrimaryColumn()
-    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE)
+    @ExposeIf(LocalUserEntity.SELECT, LocalUserEntity.LIST, LocalUserEntity.CREATE, CRUD_SELECT('LocalGroupEntity'))
     @IsString({ always: true })
     @IsNotEmpty({ always: true })
     @DefinedIf(LocalUserEntity.CREATE)

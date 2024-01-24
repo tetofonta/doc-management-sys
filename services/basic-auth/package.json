@@ -25,6 +25,7 @@
     "@dms/auth": "file:../@dms/auth",
     "@dms/crud": "file:../@dms/crud",
     "@dms/http-base": "file:../@dms/http_base",
+    "@dms/telemetry": "file:../@dms/telemetry",
     "argon2": "^0.31.2",
     "protobufjs": "^7.2.6"
   },

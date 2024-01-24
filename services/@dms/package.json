@@ -9,6 +9,7 @@
     "@dms/config": "file:./config",
     "@dms/persistence": "file:./persistence",
     "@dms/crud": "file:./crud",
-    "@dms/http-base": "file:./http_base"
+    "@dms/http-base": "file:./http_base",
+    "@dms/telemetry": "file:./telemetry"
   }
 }

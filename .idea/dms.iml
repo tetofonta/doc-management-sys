@@ -17,6 +17,7 @@
       <excludeFolder url="file://$MODULE_DIR$/frontend-old/@dms/vite-plugin-remote-component/lib" />
       <excludeFolder url="file://$MODULE_DIR$/frontend-old/out" />
       <excludeFolder url="file://$MODULE_DIR$/frontend-old" />
+      <excludeFolder url="file://$MODULE_DIR$/services/@dms/telemetry/lib" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -11,6 +11,8 @@ import { UserModule } from './user/user.module';
 import { GroupModule } from './group/group.module';
 import { WebModule } from '@dms/http-base';
 import { AppWebConfig } from '../config/WebConfig';
+import { OpenTelemetryModule } from '@dms/telemetry';
+import { DMSTelemetryConfig } from '../config/TelemetryConfig';
 
 @Module({
     imports: [
@@ -24,6 +26,11 @@ import { AppWebConfig } from '../config/WebConfig';
             imports: [ConfigLoaderModule.forFeatures(AppWebConfig)],
             inject: [getConfigKey(AppWebConfig)],
             useFactory: (conf: AppWebConfig) => conf,
+        }),
+        OpenTelemetryModule.forRootAsync({
+            imports: [ConfigLoaderModule.forFeatures(DMSTelemetryConfig)],
+            inject: [getConfigKey(DMSTelemetryConfig)],
+            useFactory: (conf: DMSTelemetryConfig) => conf.make(),
         }),
         DMSPersistenceModule,
         DMSAuthModule,

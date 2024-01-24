@@ -7,6 +7,7 @@ import {
     ReferenceManyField,
     Show,
     SimpleShowLayout,
+    TabbedShowLayout,
     TextField,
     TopToolbar,
     useAuthProvider,
@@ -103,22 +104,25 @@ const UserDetail = () => {
 
     return (
         <Show actions={<UserShowActions />}>
-            <SimpleShowLayout>
-                <TextField source="id" label={"Username"} variant={"h3"} />
+            <TabbedShowLayout>
+                <TabbedShowLayout.Tab label={"General"}>
+                    <TextField source="id" label={"Username"} variant={"h3"} />
 
-                <BooleanField label={"Enabled"} source={"enabled"} />
-                <BooleanField label={"Superuser"} source={"superuser"} />
-                <TextField label={"Last Login"} source={"lastLogin"} />
-                <TextField label={"Last Password Change"} source={"lastPasswordChange"} />
-
-                {authProvider.hasPermissions("localgroups:list") && (
-                    <ReferenceManyField label="Groups" reference="local-groups" target="local-users">
-                        <Datagrid bulkActionButtons={false} rowClick={"show"}>
-                            <TextField source="name" />
-                        </Datagrid>
-                    </ReferenceManyField>
+                    <BooleanField label={"Enabled"} source={"enabled"} />
+                    <BooleanField label={"Superuser"} source={"superuser"} />
+                    <TextField label={"Last Login"} source={"lastLogin"} />
+                    <TextField label={"Last Password Change"} source={"lastPasswordChange"} />
+                </TabbedShowLayout.Tab>
+                {authProvider.hasPermissions("localgroup:list") && (
+                    <TabbedShowLayout.Tab label={"Groups"}>
+                        <ReferenceManyField label="Groups" reference="local-groups" target="local-users">
+                            <Datagrid bulkActionButtons={false} rowClick={"show"}>
+                                <TextField source="name" />
+                            </Datagrid>
+                        </ReferenceManyField>
+                    </TabbedShowLayout.Tab>
                 )}
-            </SimpleShowLayout>
+            </TabbedShowLayout>
         </Show>
     );
 };

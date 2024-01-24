@@ -18,9 +18,12 @@
       "backends": [ "http://api-basic-auth-dev:7101" ],
       "base_path": "/local-groups",
       "endpoints": [
-        { "template_name": "endpoint", "path": "/", "to": "/api/group/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["filters[]", "sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localuser:list", "localuser:admin"] },
-        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/group/{id}/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localuser:get", "localuser:admin"] },
-        { "template_name": "endpoint", "path": "/{id}/local-users", "to": "/api/user/?filters[]=%7B%groups.id%22%3A%20%22{id}%22%7D", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localgroup:get", "localgroup:admin"] }
+        { "template_name": "endpoint", "path": "/features/", "to": "/api/group/features/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["filter[]"] }, "auth": true, "features": ["localgroup:create"] },
+        { "template_name": "endpoint", "path": "/", "to": "/api/group/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["filters[]", "sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localgroup:list"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/group/{id}/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localgroup:get"] },
+        { "template_name": "endpoint", "path": "/{id}/local-users", "to": "/api/user/?filters[]=%7B%22groups.id%22%3A%20%22{id}%22%7D", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["sortAsc[]", "sortDesc[]", "take", "offset"] }, "auth": true, "features": ["localuser:get", "localuser:admin"] },
+        { "template_name": "endpoint", "path": "/", "to": "/api/group/", "method": "POST", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localgroup:create"] },
+        { "template_name": "endpoint", "path": "/{id}/", "to": "/api/group/{id}/", "method": "PUT", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localgroup:edit"] }
       ]
     }
   ]

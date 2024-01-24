@@ -9,7 +9,8 @@ import { TokenModule } from './token/token.module';
 import { WellKnownController } from './well-known.controller';
 import { WebModule } from '@dms/http-base';
 import { AppWebConfig } from '../config/WebConfig';
-import { TokenPayload } from '../proto_types/token/auth-token';
+import { OpenTelemetryModule } from '@dms/telemetry';
+import { DMSTelemetryConfig } from '../config/TelemetryConfig';
 
 @Module({
     imports: [
@@ -23,6 +24,11 @@ import { TokenPayload } from '../proto_types/token/auth-token';
             imports: [ConfigLoaderModule.forFeatures(AppWebConfig)],
             inject: [getConfigKey(AppWebConfig)],
             useFactory: (conf: AppWebConfig) => conf,
+        }),
+        OpenTelemetryModule.forRootAsync({
+            imports: [ConfigLoaderModule.forFeatures(DMSTelemetryConfig)],
+            inject: [getConfigKey(DMSTelemetryConfig)],
+            useFactory: (conf: DMSTelemetryConfig) => conf.make(),
         }),
         TokenModule,
     ],

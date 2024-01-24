@@ -1,0 +1,2 @@
+enable_prometheus: true
+otel_url: http://jaeger:4317

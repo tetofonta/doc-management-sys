@@ -15,7 +15,6 @@ import { Tooltip } from "@mui/material";
 import { Info } from "@mui/icons-material";
 
 const InnerComponent = (props: { create: boolean }) => {
-    console.log(useSaveContext());
     return (
         <SimpleForm>
             <TextInput name="id" source="id" validate={props.create ? [required()] : []} />

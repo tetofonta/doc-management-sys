@@ -4,7 +4,19 @@
   "name": "DMS",
   {{template "general.tmpl" . }},
   "extra_config": {
-    "telemetry/logging": {{template "logging.tmpl" .logging }}
+    "telemetry/logging": {{template "logging.tmpl" .logging }},
+    "telemetry/opencensus": {
+          "sample_rate": 100,
+          "reporting_period": 0,
+          "exporters": {
+            "jaeger": {
+              "endpoint": "http://jaeger:14268/api/traces",
+              "service_name":"krakend",
+              "buffer_max_count": 1000
+            }
+          }
+        }
+
   },
   "endpoints": [
     {{ template "service.tmpl" (set .auth "general" .general) }},

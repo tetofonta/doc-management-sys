@@ -14,7 +14,7 @@ export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Ent
     }
 
     public async list(res: Response, query: ListQuery<Entity>): Promise<ListResponse<ReturnType>> {
-        const qObject = query.queryObject;
+        const qObject = query?.queryObject;
         qObject.where = Object.assign(qObject.where || {}, this.fixedQuery);
         const [data, count] = await this._repository.findAndCount({ ...qObject, relations: this.relations });
 

@@ -4,6 +4,7 @@ import { EditGuesser, ShowGuesser } from "react-admin";
 
 const GroupList = React.lazy(() => import("./Groups/List"));
 const GroupDetail = React.lazy(() => import("./Groups/Detail"));
+const GroupForm = React.lazy(() => import("./Groups/Form"));
 
 const GroupResource = {
     name: "local-groups",
@@ -20,7 +21,16 @@ const GroupResource = {
             <GroupDetail />
         </Suspense>
     ),
-    edit: EditGuesser,
+    create: () => (
+        <Suspense>
+            <GroupForm create={true} />
+        </Suspense>
+    ),
+    edit: () => (
+        <Suspense>
+            <GroupForm create={false} />
+        </Suspense>
+    ),
     requiredListFeatures: ["localgroup:list"],
     requiredShowFeatures: ["localgroup:get"],
     requiredEditFeatures: ["localgroup:edit"],

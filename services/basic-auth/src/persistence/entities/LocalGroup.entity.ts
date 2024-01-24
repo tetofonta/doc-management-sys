@@ -40,14 +40,14 @@ export class LocalGroupEntity extends BaseEntity {
     @DefinedIf(LocalGroupEntity.CREATE)
     public name: string;
 
-    @Column({ array: true, type: 'text' })
+    @Column({ array: true, type: 'text', default: [] })
     @ExposeIf(LocalGroupEntity.SELECT, LocalGroupEntity.CREATE, LocalGroupEntity.EDIT)
     @IsString({ each: true, always: true })
     @IsArray({ always: true })
     public associated_features: string[];
 
     @ManyToMany(() => LocalUserEntity, (u) => u.groups)
-    @ExposeIf(LocalGroupEntity.CREATE, LocalGroupEntity.EDIT)
+    @ExposeIf(LocalGroupEntity.CREATE, LocalGroupEntity.EDIT, LocalGroupEntity.SELECT)
     @Transform(({ value }: TransformFnParams) => ({ id: value }), {
         groups: [LocalGroupEntity.CREATE, LocalGroupEntity.EDIT],
     })
