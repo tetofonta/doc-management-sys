@@ -18,6 +18,7 @@ const LogoutButton = React.forwardRef((props, ref: ForwardedRef<any>) => {
                     display_message: "Are you sure to logout?",
                     cb: async (r) => {
                         if (r.result == YesNoResult.YES) await logout();
+                        return true;
                     },
                 } as YesNoDisplayModalProps);
             }}

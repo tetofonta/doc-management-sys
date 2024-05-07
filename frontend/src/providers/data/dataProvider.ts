@@ -29,6 +29,7 @@ export class ApplicationDataProvider implements DataProvider {
     constructor(
         private readonly apiRoot: string,
         private readonly fetchFunc?: any,
+        private readonly setFacets?: any,
     ) {
         if (!this.fetchFunc)
             this.fetchFunc = (
@@ -47,6 +48,9 @@ export class ApplicationDataProvider implements DataProvider {
         const query = this.prepareListQuery(params);
         const url = `${this.apiRoot}/${resource}/?${querystring.stringify(query, { arrayFormat: "bracket" })}`;
         const { json } = await this.fetchFunc(url, { method: "GET", cache: "no-cache" });
+        if(this.setFacets && json.facets) {
+            this.setFacets(resource, json.facets);
+        }
         return {
             data: json.result,
             total: json.count,
@@ -167,6 +171,9 @@ export class ApplicationDataProvider implements DataProvider {
         const { page, perPage } = params.pagination;
         const { field, order } = params.sort;
         const sort_match = this.zip([field], [order]).filter((e) => !!e[0]);
+        const additional_queries = params.meta?.query_params ?? {};
+
+        const raw_filter = params.meta?.filter_middleware ? params.meta?.filter_middleware(params.filter) : params.filter;
 
         return Object.assign(
             {
@@ -174,8 +181,9 @@ export class ApplicationDataProvider implements DataProvider {
                 take: perPage,
                 sortAsc: sort_match.filter((e) => e[1] == "ASC" || !e[1]).map((e) => e[0]),
                 sortDesc: sort_match.filter((e) => e[1] == "DESC").map((e) => e[0]),
+                ...additional_queries,
             },
-            this.filterParameterName(params.filter),
+            params.meta?.filter_in_query ? raw_filter : this.filterParameterName(raw_filter),
         );
     }
 

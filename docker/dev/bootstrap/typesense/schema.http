@@ -1,0 +1,159 @@
+### Create document metadata schema
+POST http://localhost:8108/collections/
+Content-Type: application/json
+X-TYPESENSE-API-KEY: LOL1234
+
+{
+  "name": "metadata",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "type",
+      "type": "string"
+    },
+    {
+      "name": "owner",
+      "type": "string",
+      "sort": true,
+      "facet": true
+    },
+    {
+      "name": "group",
+      "type": "string",
+      "optional": true,
+      "facet": true,
+      "sort": true
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "facet": true,
+      "infix": true,
+      "sort": true
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "infix": true,
+      "sort": true
+    },
+    {
+      "name": "group_can_edit",
+      "type": "bool",
+      "index": false
+    },
+    {
+      "name": "group_can_delete",
+      "type": "bool",
+      "index": false
+    },
+    {
+      "name": "group_can_read",
+      "type": "bool",
+      "index": false
+    },
+    {
+      "name": "embedding",
+      "type": "float[]",
+      "embed": {
+        "from": [
+          "category",
+          "title"
+        ],
+        "model_config": {
+          "model_name": "ts/all-MiniLM-L12-v2"
+        }
+      }
+    },
+    {
+      "name": ".*",
+      "type": "auto"
+    }
+  ],
+  "token_separators": ["-", "_", "+", "@", ":", "/"],
+  "default_sorting_field": "title"
+}
+
+### Create tag association aux schema
+POST http://localhost:8108/collections/
+Content-Type: application/json
+X-TYPESENSE-API-KEY: LOL1234
+
+{
+  "name": "tag",
+  "fields": [
+    {
+      "name": "tag",
+      "type": "string",
+      "sort": true,
+      "facet": true
+    },
+    {
+      "name": "ref",
+      "type": "string",
+      "reference": "metadata.id"
+    }
+  ],
+  "default_sorting_field": "tag"
+}
+
+### Create file association aux schema
+POST http://localhost:8108/collections/
+Content-Type: application/json
+X-TYPESENSE-API-KEY: LOL1234
+
+{
+  "name": "association",
+  "fields": [
+    {
+      "name": "src",
+      "type": "string"
+    },
+    {
+      "name": "dest",
+      "type": "string",
+      "reference": "metadata.id"
+    }
+  ]
+}
+
+### Create file content aux schema
+POST http://localhost:8108/collections/
+Content-Type: application/json
+X-TYPESENSE-API-KEY: LOL1234
+
+{
+  "name": "content",
+  "fields": [
+    {
+      "name": "ref",
+      "type": "string",
+      "reference": "metadata.id"
+    },
+    {
+      "name": "chunk",
+      "type": "string"
+    },
+    {
+      "name": "chunk_type",
+      "type": "string"
+    },
+    {
+      "name": "embedding",
+      "type": "float[]",
+      "embed": {
+        "from": [
+          "chunk"
+        ],
+        "model_config": {
+          "model_name": "ts/all-MiniLM-L12-v2"
+        }
+      }
+    }
+  ],
+  "token_separators": ["-", "_", "+", "@", ":", "/"]
+}
+

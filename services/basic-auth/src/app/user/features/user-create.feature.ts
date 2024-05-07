@@ -17,7 +17,7 @@ export class LocalUserCreateFeature extends CreateFeature<LocalUserEntity> {
         super(userRepository);
     }
 
-    protected async makeObject(body: DeepPartial<LocalUserEntity>): Promise<DeepPartial<LocalUserEntity>> {
+    protected async makeObject(body: DeepPartial<LocalUserEntity>): Promise<LocalUserEntity> {
         if (!body.password) body.password = Math.random().toString(26).substring(2);
 
         if (body.groups) {
@@ -29,9 +29,6 @@ export class LocalUserCreateFeature extends CreateFeature<LocalUserEntity> {
                     .filter((e) => !!e.id),
             });
         }
-
-        console.log(body)
-
-        return body;
+        return this.userRepository.create(body);
     }
 }

@@ -18,6 +18,7 @@
       <excludeFolder url="file://$MODULE_DIR$/frontend-old/out" />
       <excludeFolder url="file://$MODULE_DIR$/frontend-old" />
       <excludeFolder url="file://$MODULE_DIR$/services/@dms/telemetry/lib" />
+      <excludeFolder url="file://$MODULE_DIR$/frontend/out" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

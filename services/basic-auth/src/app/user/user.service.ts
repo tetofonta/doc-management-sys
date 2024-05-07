@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { LocalGroupEntity } from '../../persistence/entities/LocalGroup.entity';
 import { InjectConfig } from '@dms/config/lib/decorators/inject-config.decorator';
 import { DMSAuthConfig } from '../../config/AuthConfig';
+import { Span } from '@dms/telemetry';
 
 @Injectable()
 export class UserService {
@@ -18,6 +19,7 @@ export class UserService {
         this.init().then();
     }
 
+    @Span()
     private async init() {
         if (!this.config.passwords.createUser) return;
 

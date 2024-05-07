@@ -1,0 +1,81 @@
+### Get the full list of available documents
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "metadata",
+      "page": 2,
+      "per_page": 10,
+      "q": "*",
+      "facet_by": "category,owner,group",
+      "filter_by": "$tag(id: *)",
+      "include_fields": "id,title,owner,group,$tag(tag)",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### list in category
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "metadata",
+      "page": 1,
+      "per_page": 10,
+      "q": "*",
+      "facet_by": "category,owner,group",
+      "filter_by": "$tag(id: *) &&  category: Sustainability*",
+      "include_fields": "id,owner,group,$tag(tag),title",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### search categories
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "metadata",
+      "page": 5,
+      "per_page": 10,
+      "q": "payments",
+      "query_by": "category,embedding",
+      "infix": "always,off",
+      "include_fields": "category",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### full search on all documents
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "content",
+      "page": 1,
+      "per_page": 10,
+      "q": "download speed",
+      "filter_by": "$metadata(id: *)",
+      "query_by": "chunk",
+      "include_fields": "$metadata(owner,group,title,category),chunk_type",
+      "highlight_fields": "chunk",
+      "exclude_fields": "embedding,ref",
+      "enable_highlight_v1": false
+    }
+  ]
+}

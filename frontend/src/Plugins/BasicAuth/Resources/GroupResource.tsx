@@ -1,6 +1,6 @@
 import { PluginResourceType } from "../../resources";
 import React, { Suspense } from "react";
-import { EditGuesser, ShowGuesser } from "react-admin";
+import { Group } from "@mui/icons-material";
 
 const GroupList = React.lazy(() => import("./Groups/List"));
 const GroupDetail = React.lazy(() => import("./Groups/Detail"));
@@ -8,6 +8,8 @@ const GroupForm = React.lazy(() => import("./Groups/Form"));
 
 const GroupResource = {
     name: "local-groups",
+    group: "Local Authentication",
+    icon: Group,
     options: {
         label: "Local Groups",
     },

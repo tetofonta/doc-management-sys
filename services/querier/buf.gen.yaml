@@ -1,0 +1,11 @@
+version: v1
+plugins:
+  - plugin: buf.build/community/stephenh-ts-proto
+    out: src/proto_types
+    opt:
+      - removeEnumPrefix=true
+      - snakeToCamel=false
+      - outputJsonMethods=false
+      - stringEnums=true
+      - useDate=true
+      - outputSchema=true

@@ -1,22 +1,36 @@
 import { BaseEntity } from '@dms/persistence';
-import { DeepPartial, FindOptionsWhere, Repository } from 'typeorm';
+import { DeepPartial, FindManyOptions, FindOptionsWhere, Repository, SelectQueryBuilder } from 'typeorm';
 import { Response } from 'express';
 import { ListQuery } from '../types/ListQuery';
 import { ListResponse } from '../types/ListResponse';
 
-export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Entity>> {
+export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Entity>, Data = any> {
     constructor(
         private readonly _repository: Repository<Entity>,
         private readonly relations?: string[],
         private readonly fixedQuery: FindOptionsWhere<Entity> = {},
-        private readonly synchronous = false,
-    ) {
+        private readonly synchronous = false
+    ) {}
+
+    public async list(res: Response, query: ListQuery<Entity>, data?: Data): Promise<ListResponse<ReturnType>> {
+        const qObject = query?.queryObject || {};
+        qObject.where = Object.assign(qObject.where || {}, this.fixedQuery);
+        return await this.perform_query(res, qObject, undefined, data);
     }
 
-    public async list(res: Response, query: ListQuery<Entity>): Promise<ListResponse<ReturnType>> {
-        const qObject = query?.queryObject;
-        qObject.where = Object.assign(qObject.where || {}, this.fixedQuery);
-        const [data, count] = await this._repository.findAndCount({ ...qObject, relations: this.relations });
+    protected async perform_query(
+        res: Response,
+        qObject: FindManyOptions<Entity>,
+        qb?: SelectQueryBuilder<Entity>,
+        d?: Data
+    ): Promise<ListResponse<ReturnType>> {
+        let data = [],
+            count: number;
+
+        if (!qb) [data, count] = await this._repository.findAndCount({ ...qObject, relations: this.relations });
+        else {
+            [data, count] = await qb.getManyAndCount();
+        }
 
         const unit = this._repository.metadata.tableName;
         const begin = qObject.skip || 0;
@@ -27,7 +41,7 @@ export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Ent
             const ret = Array(data.length);
             let i = 0;
             for (const e of data) {
-                ret[i] = await this.hydrate(e, i++, data);
+                ret[i] = await this.hydrate(e, i++, data, d);
             }
             const r = ret.filter((e) => !!e);
             return {
@@ -38,7 +52,7 @@ export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Ent
             };
         }
 
-        const r = (await Promise.all(data.map((e, i) => this.hydrate(e, i, data)))).filter(e => !!e);
+        const r = (await Promise.all(data.map((e, i) => this.hydrate(e, i, data, d)))).filter((e) => !!e);
         return {
             result: r,
             from: begin,
@@ -48,7 +62,7 @@ export class ListFeature<Entity extends BaseEntity, ReturnType = DeepPartial<Ent
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    protected async hydrate(element: Entity, _index: number, _list: Entity[]): Promise<ReturnType | null> {
+    protected async hydrate(element: Entity, _index: number, _list: Entity[], _data: Data): Promise<ReturnType | null> {
         return element as unknown as ReturnType;
     }
 }

@@ -534,6 +534,122 @@
         
     }
 }
+,
+    {
+    "endpoint": "/api/files//",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["q","filter_string","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/documents/",
+            "method": "GET",
+            "host": ["http://api-querier-dev:7002"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","documents","documents:list"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/files//search/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["q","filter_string","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/documents/search/",
+            "method": "GET",
+            "host": ["http://api-querier-dev:7002"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","documents","documents:list"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/files//tag/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["q","filter_string","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/documents/tag/",
+            "method": "GET",
+            "host": ["http://api-querier-dev:7002"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","documents","documents:list","documents:list:tag"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
+,
+    {
+    "endpoint": "/api/files//category/",
+    "method": "GET",
+    "output_encoding": "no-op",
+    "input_headers": ["Authorization"],
+    "input_query_strings": ["q","filter_string","take","offset"],
+    "backend": [
+        {
+            "url_pattern": "/api/documents/category/",
+            "method": "GET",
+            "host": ["http://api-querier-dev:7002"]
+        }
+    ],
+    "extra_config": {
+        
+            "auth/validator": {
+    "alg": "ES384",
+    "audience": ["dms"],
+    "roles_key": "features",
+    "jwk_url": "http://api-token-dev:7100/api/.well-known/jwks.json",
+    "roles": ["__superuser__","documents","documents:list","documents:list:category"],
+    "cache": true,
+    "disable_jwk_security": true,
+    "operation_debug": true
+}
+        
+    }
+}
 
   ]
 }

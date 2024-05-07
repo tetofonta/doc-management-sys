@@ -5,7 +5,7 @@ export interface CbProps {}
 
 export interface DisplayModalProps<T> {
     kind: string;
-    cb?: (args: T) => void;
+    cb?: (args: T) => boolean;
 }
 
 export interface ModalProps<T, V extends DisplayModalProps<T>> {
@@ -19,7 +19,7 @@ export type ModalDescriptor<T, V extends DisplayModalProps<T>> = {
 };
 
 export const ModalContext = createContext({
-    display: (_props: DisplayModalProps<any>) => {},
+    display: (_props: DisplayModalProps<any>): boolean | void => {},
     exists: (_key: string): boolean => false,
 });
 

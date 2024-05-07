@@ -1,0 +1,3 @@
+port: 7002
+bind_address: 0.0.0.0
+log_requests: true

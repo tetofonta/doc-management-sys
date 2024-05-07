@@ -1,0 +1,138 @@
+### Get Tag List (and query)
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "tag",
+      "page": 1,
+      "per_page": 10,
+      "q": "*",
+      "filter_by": "$metadata(owner: userone || group: groupone)",
+      "query_by": "tag",
+      "group_by":  "tag",
+      "include_fields": "-,$metadata(-)",
+      "group_limit": 1,
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### Get Category List (and query)
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "metadata",
+      "page": 1,
+      "per_page": 10,
+      "q": "technology",
+      "filter_by": "owner: admin || group: local_group",
+      "query_by": "category,embedding",
+      "group_by":  "category",
+      "include_fields": "-",
+      "group_limit": 1,
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### Get Document List. Query text: wifi type:pdf
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "metadata",
+      "page": 1,
+      "per_page": 10,
+      "q": "wifi",
+      "filter_by": "(type:pdf) && $tag(id:*) && (owner: userone || group: groupone)",
+      "query_by": "title,embedding",
+      "facet_by": "category,owner,group",
+      "include_fields": "category,owner,group,title,$tag(tag),id",
+      "exclude_fields": "embedding",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### Search document Query text: nature category:Psychology* type:pdf tag:Telemedicine tag:Technology
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "content",
+      "page": 1,
+      "per_page": 10,
+      "q": "*",
+      "filter_by": "$metadata((owner:admin || group:local_user) && $tag(id:*))",
+      "query_by": "chunk,embedding",
+      "include_fields": "$metadata(owner,group,title,category,id, strategy: merge),chunk_type",
+      "exclude_fields": "embedding,ref",
+      "highlight_fields": "chunk",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+### expand document graph
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+    {
+      "collection": "association",
+      "q": "*",
+      "filter_by": "src: `a4e3ab36-0afe-11ef-86ea-70a6ccb471d9` && $metadata((owner: userthree || group: groupone))",
+      "include_fields": "-,$metadata(title,owner,group,category, strategy: merge)",
+      "enable_highlight_v1": false
+    },
+    {
+      "collection": "tag",
+      "q": "*",
+      "filter_by": "$metadata(id: `a4e3ab36-0afe-11ef-86ea-70a6ccb471d9` && (owner: userthree || group: groupone))",
+      "include_fields": "tag,$metadata(-)",
+      "enable_highlight_v1": false
+    }
+  ]
+}
+
+
+### expand document graph
+POST http://localhost:8108/multi_search
+X-TYPESENSE-API-KEY: LOL1234
+Content-Type: application/json
+
+{
+  "searches": [
+      {
+        "collection": "association",
+        "q": "*",
+        "filter_by": "(src:`a4e3ab36-0afe-11ef-86ea-70a6ccb471d9`) && $metadata((owner:admin || group:local_user))",
+        "include_fields": "src,dest,$metadata(title,owner,group,category, strategy: merge)",
+        "enable_highlight_v1": false
+      },
+      {
+        "collection": "tag",
+        "q": "*",
+        "filter_by": "$metadata(((id:`a4e3ab36-0afe-11ef-86ea-70a6ccb471d9`) && (owner:admin || group:local_user)))",
+        "include_fields": "tag,$metadata(id as src, strategy: merge)",
+        "enable_highlight_v1": false
+      }
+  ]
+}
+
+

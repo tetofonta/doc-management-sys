@@ -1,5 +1,6 @@
 import { PluginResourceType } from "../../resources";
 import React, { Suspense } from "react";
+import { Person } from "@mui/icons-material";
 
 const UserList = React.lazy(() => import("./Users/List"));
 const UserDetail = React.lazy(() => import("./Users/Detail"));
@@ -7,6 +8,8 @@ const UserForm = React.lazy(() => import("./Users/Form"));
 
 const UserResource = {
     name: "local-users",
+    group: "Local Authentication",
+    icon: Person,
     options: {
         label: "Local Users",
     },

@@ -25,6 +25,16 @@
         { "template_name": "endpoint", "path": "/", "to": "/api/group/", "method": "POST", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localgroup:create"] },
         { "template_name": "endpoint", "path": "/{id}/", "to": "/api/group/{id}/", "method": "PUT", "inputs": { "headers": ["Authorization"], "queries": [] }, "auth": true, "features": ["localgroup:edit"] }
       ]
+    },
+    {
+      "backends": [ "http://api-querier-dev:7002" ],
+      "base_path": "/files/",
+      "endpoints": [
+        { "template_name": "endpoint", "path": "/", "to": "/api/documents/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["q", "filter_string", "take", "offset"] }, "auth": true, "features": ["documents:list"] },
+        { "template_name": "endpoint", "path": "/search/", "to": "/api/documents/search/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["q", "filter_string", "take", "offset"] }, "auth": true, "features": ["documents:list"] },
+        { "template_name": "endpoint", "path": "/tag/", "to": "/api/documents/tag/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["q", "filter_string", "take", "offset"] }, "auth": true, "features": ["documents:list:tag"] },
+        { "template_name": "endpoint", "path": "/category/", "to": "/api/documents/category/", "method": "GET", "inputs": { "headers": ["Authorization"], "queries": ["q", "filter_string", "take", "offset"] }, "auth": true, "features": ["documents:list:category"] }
+      ]
     }
   ]
 }

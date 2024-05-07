@@ -41,7 +41,7 @@ const AboutPage = () => {
                                         title: "Yuppi!",
                                         display_message: "I'm glad to hear that",
                                     } as MessageDisplayModalProps);
-                                default:
+                                case YesNoResult.NO:
                                     return display({
                                         kind: "message",
                                         title: "Sad!",

@@ -12,6 +12,7 @@ export type AuthenticatedResourceProps = ResourceProps & {
     requiredDeleteFeatures?: FeatureSet<string>[];
     requiredCreateFeatures?: FeatureSet<string>[];
     resourceComponent?: React.FunctionComponent<ResourceProps>;
+    group?: string;
 };
 const AuthenticatedResource = function (props: AuthenticatedResourceProps) {
     const {
@@ -67,6 +68,7 @@ AuthenticatedResource.registerResource = (props: AuthenticatedResourceProps) => 
         hasDelete: access && deleteAccess,
         icon: props.icon,
         recordRepresentation: access ? props.recordRepresentation : undefined,
+        group: props.group || 'default',
     };
 };
 

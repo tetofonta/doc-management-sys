@@ -27,7 +27,7 @@ export class LocalGroupCreateFeature extends CreateFeature<LocalGroupEntity> {
         return (await query.getRawMany()).map((e) => e.feature);
     }
 
-    protected async makeObject(body: DeepPartial<LocalGroupEntity>): Promise<DeepPartial<LocalGroupEntity>> {
+    protected async makeObject(body: DeepPartial<LocalGroupEntity>): Promise<LocalGroupEntity> {
         if (body.users) {
             body.users = await this.userRepository.find({
                 where: body.users
@@ -37,6 +37,6 @@ export class LocalGroupCreateFeature extends CreateFeature<LocalGroupEntity> {
                     .filter((e) => !!e.id),
             });
         }
-        return body;
+        return this.groupRepository.create(body);
     }
 }

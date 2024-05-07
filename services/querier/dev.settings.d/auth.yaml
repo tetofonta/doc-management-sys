@@ -1,0 +1,7 @@
+jwt:
+  signOptions:
+    algorithm: ES384
+    audience: "dms"
+  verifyOptions:
+    audience: "dms"
+refresh_token_hmac_secret: 'anothersupersecret...'

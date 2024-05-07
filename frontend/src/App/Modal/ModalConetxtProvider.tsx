@@ -1,32 +1,33 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { CbProps, DisplayModalProps, ModalContext } from "./modalContext";
 import { DEFAULT_MODALS } from "../defaults/default_modals";
 import { useApplicationModals } from "../../Plugins/modals";
 
+const hist: DisplayModalProps<CbProps>[] = [];
+
 export const ModalContextProvider = (props: { children: React.ReactElement | React.ReactElement[] }) => {
     const modals = useApplicationModals();
-    const [type, setType] = useState("");
-    const [cb, setCb] = useState<undefined | ((args: CbProps) => void)>(undefined);
-    const [p, setProps] = useState<object>({});
+    const [p, setProps] = useState<DisplayModalProps<CbProps> | null>(null);
 
     const close = useCallback(
         (args: CbProps) => {
-            setType("");
-            if (cb) cb(args);
+            let ret: boolean | undefined = false;
+            const pp = { ...p };
+            if (p?.cb) ret = p.cb(args);
+            if (!ret) setProps(hist.pop() || null);
+            else hist.push(pp as DisplayModalProps<CbProps>);
         },
-        [cb],
+        [p],
     );
 
     const display = useCallback(
         (props: DisplayModalProps<CbProps>) => {
             if (!modals || !modals[props.kind]) {
                 console.error("No modal fount with the kind set to", props.kind);
-                return;
+                return false;
             }
-
-            setCb((_old: undefined | ((args: CbProps) => void)) => props.cb);
             setProps(props);
-            setType(props.kind);
+            return true;
         },
         [modals],
     );
@@ -49,8 +50,8 @@ export const ModalContextProvider = (props: { children: React.ReactElement | Rea
 
             {...Object.keys(modals).map((k) =>
                 React.createElement(modals[k], {
-                    show: type === k,
-                    props: p,
+                    show: p?.kind === k,
+                    props: p || {},
                     close,
                 }),
             )}
