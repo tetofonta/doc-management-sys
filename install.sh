@@ -1,0 +1,1 @@
+docker run --rm --entrypoint sh -v ./services/:/wd --workdir /wd node:20.5-alpine -c 'npm install'

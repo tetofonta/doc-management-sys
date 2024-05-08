@@ -33,15 +33,16 @@ for f in glob("files/*.txt"):
 
     for line in content:
         type, data = line.split(":", 1)
+        data = data.strip()
         if type == "Title":
             metadata["title"] = data[1:-1].strip()
             contents.append({
                 "ref": metadata["id"],
-                "chunk": data[1:-1].strip(),
+                "chunk": data.strip()[1:-1],
                 "chunk_type": "title"
             })
         elif type == "Category":
-            metadata["category"] = data.strip()
+            metadata["category"] = data.lower().replace(" ", "_").strip()
         elif type == "User":
             metadata["owner"] = data.strip()
         elif type == "Group":
@@ -53,12 +54,15 @@ for f in glob("files/*.txt"):
                     "ref": metadata["id"]
                 })
         elif type == "Content" or type == "Summary":
+            count = 0
             for t in data.split(". "):
                 contents.append({
                     "ref": metadata["id"],
                     "chunk": t.strip(),
-                    "chunk_type": type.lower()
+                    "chunk_type": type.lower(),
+                    "offset": count
                 })
+                count += len(t)
 
     req("http://localhost:8108/collections/metadata/documents", metadata)
     for tag in tags:

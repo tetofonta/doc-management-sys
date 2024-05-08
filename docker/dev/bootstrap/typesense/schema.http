@@ -131,7 +131,8 @@ X-TYPESENSE-API-KEY: LOL1234
     {
       "name": "ref",
       "type": "string",
-      "reference": "metadata.id"
+      "reference": "metadata.id",
+      "facet": true
     },
     {
       "name": "chunk",
@@ -140,6 +141,11 @@ X-TYPESENSE-API-KEY: LOL1234
     {
       "name": "chunk_type",
       "type": "string"
+    },
+    {
+      "name": "offset",
+      "type": "int64",
+      "optional": true
     },
     {
       "name": "embedding",

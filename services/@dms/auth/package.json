@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "main": "lib/lib.js",
   "scripts": {
-    "build": "tsc"
+    "proto": "buf generate ../../../types --path ../../../types/token",
+    "build": "npm run proto; tsc"
   },
   "dependencies": {
     "@nestjs/jwt": "^10.2.0",

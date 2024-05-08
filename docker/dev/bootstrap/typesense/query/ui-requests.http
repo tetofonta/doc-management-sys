@@ -80,6 +80,7 @@ Content-Type: application/json
       "query_by": "chunk,embedding",
       "include_fields": "$metadata(owner,group,title,category,id, strategy: merge),chunk_type",
       "exclude_fields": "embedding,ref",
+      "group_by": "ref",
       "highlight_fields": "chunk",
       "enable_highlight_v1": false
     }

@@ -23,6 +23,7 @@
     "typescript": "^5.1.3",
     "@dms/libs": "file:./@dms",
     "@dms-microservice/basic-auth": "file:./basic-auth",
-    "@dms-microservice/token": "file:./token"
+    "@dms-microservice/token": "file:./token",
+    "@dms-microservice/querier": "file:./querier"
   }
 }
